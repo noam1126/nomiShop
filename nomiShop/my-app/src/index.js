@@ -1,17 +1,37 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const UserModel = require("./Server/model/ShopUser");
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+mongoose.connect(
+  "mongodb+srv://milisegal123:nomi2468@cluster.loiazet.mongodb.net/user"
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  UserModel.findOne({ email: email }).then((user) => {
+    if (user) {
+      if (user.password === password) {
+        res.json("Success");
+      } else {
+        res.json("The password is incorrect");
+      }
+    } else {
+      res.json("No record existed");
+    }
+  });
+});
+
+app.post("/register", (req, res) => {
+  UserModel.create(req.body)
+    .then((users) => res.json(users))
+    .catch((err) => res.json(err));
+});
+
+app.listen(5000, () => {
+  console.log("server is running");
+});
