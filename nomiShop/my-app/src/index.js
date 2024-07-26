@@ -1,15 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const UserModel = require("./model/ShopUser");
+const UserModel = require("./model/User");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect(
-  "mongodb+srv://milisegal123:nomi2468@cluster.loiazet.mongodb.net/user"
-);
+mongoose.connect("mongodb://127.0.0.1:27017/user");
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -27,11 +25,11 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  UserModel.create(req.body)
-    .then((users) => res.json(users))
+  EmployeeModel.create(req.body)
+    .then((employees) => res.json(employees))
     .catch((err) => res.json(err));
 });
 
-app.listen(5000, () => {
+app.listen(3001, () => {
   console.log("server is running");
 });
