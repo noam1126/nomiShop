@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const UserModel = require("./Server/model/ShopUser");
+const UserModel = require("./model/ShopUser");
 
 const app = express();
 app.use(express.json());

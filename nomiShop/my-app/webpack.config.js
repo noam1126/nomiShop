@@ -4,6 +4,7 @@ module.exports = {
   // Your other webpack configuration options
   resolve: {
     fallback: {
+      vm: require.resolve("vm-browserify"),
       crypto: require.resolve("crypto-browserify"),
       path: require.resolve("path-browserify"),
       stream: require.resolve("stream-browserify"),
