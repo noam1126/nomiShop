@@ -7,7 +7,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect("mongodb://127.0.0.1:27017/user");
+const mongoURI =
+  "mongodb+srv://milisegal123:nomi2468@cluster.loiazet.mongodb.net/usersData";
+
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
