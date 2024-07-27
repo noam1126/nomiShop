@@ -10,10 +10,10 @@ app.use(cors());
 const mongoURI =
   "mongodb+srv://milisegal123:nomi2468@cluster.loiazet.mongodb.net/usersData";
 
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(mongoURI)
+  .then((x) => console.log("connected successfully"))
+  .catch((e) => console.error(e));
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -31,9 +31,15 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  EmployeeModel.create(req.body)
-    .then((employees) => res.json(employees))
+  console.log("register started...");
+  UserModel.create(req.body)
+    .then((users) => res.json(users))
     .catch((err) => res.json(err));
+});
+
+app.get("/test", (req, res) => {
+  console.log("test!!!!!");
+  return res.json("ok!");
 });
 
 app.listen(3001, () => {
