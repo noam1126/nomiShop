@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Dashboard from "./Dashboard";
 
 function Login() {
   const [email, setEmail] = useState();
@@ -15,7 +16,7 @@ function Login() {
       .then((result) => {
         console.log(result);
         if (result.data === "Success") {
-          navigate("/home");
+          navigate("/dashboard");
         } else {
           navigate("/register");
           alert("You are not registered to this service");
