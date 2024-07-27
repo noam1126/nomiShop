@@ -1,19 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import WelcomePage from './pages/WelcomePage';
-import SellerDashboard from './pages/SellerDashboard';
-import BuyerDashboard from './pages/BuyerDashboard';
+import Dashboard from './pages/Dashboard';
+import ProfilePage from './pages/ProfilePage';
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<WelcomePage />} />
-        <Route path="/seller" element={<SellerDashboard />} />
-        <Route path="/buyer" element={<BuyerDashboard />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;

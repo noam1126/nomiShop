@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import './BuyerDashboard.css';
+import { useNavigate } from 'react-router-dom';
+import './Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faHeart, faUser } from '@fortawesome/free-solid-svg-icons';
 
+// Sample product data
 const productsData = {
   Electronics: [
     { id: 1, name: 'Smartphone', price: '$499', imgSrc: 'https://via.placeholder.com/150' },
@@ -29,18 +31,24 @@ const allProducts = [
   ...productsData.Shoes
 ];
 
-const BuyerDashboard = () => {
+const Dashboard = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const products = selectedCategory === 'All' ? allProducts : productsData[selectedCategory];
+  const navigate = useNavigate();
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
+  const handleProfileClick = () => {
+    navigate('/profile');
+  };
+
   return (
-    <div className="buyer-dashboard">
+    <div className="dashboard">
+      {/* Header with icons */}
       <header className="header">
-        <h1 className="site-title">nimoShop online</h1>
+        <h1 className="site-title">My E-Commerce Shop</h1>
         <div className="icons">
           <button className="icon-button">
             <FontAwesomeIcon icon={faShoppingCart} />
@@ -48,16 +56,18 @@ const BuyerDashboard = () => {
           <button className="icon-button">
             <FontAwesomeIcon icon={faHeart} />
           </button>
-          <button className="icon-button">
+          <button className="icon-button" onClick={handleProfileClick}>
             <FontAwesomeIcon icon={faUser} />
           </button>
         </div>
       </header>
 
+      {/* Sliding message */}
       <section className="sliding-message">
         <div className="message">🎉 Big Sale! Up to 50% off on selected items! 🎉</div>
       </section>
 
+      {/* Categories Navbar */}
       <nav className="categories-navbar">
         <button className={`nav-item ${selectedCategory === 'All' ? 'active' : ''}`} onClick={() => handleCategoryChange('All')}>All</button>
         <button className={`nav-item ${selectedCategory === 'Electronics' ? 'active' : ''}`} onClick={() => handleCategoryChange('Electronics')}>Electronics</button>
@@ -66,6 +76,7 @@ const BuyerDashboard = () => {
         <button className={`nav-item ${selectedCategory === 'Shoes' ? 'active' : ''}`} onClick={() => handleCategoryChange('Shoes')}>Shoes</button>
       </nav>
 
+      {/* Product Showcase */}
       <section className="product-showcase">
         <h2 className="section-title">Featured Products</h2>
         <div className="product-list">
@@ -84,4 +95,4 @@ const BuyerDashboard = () => {
   );
 };
 
-export default BuyerDashboard;
+export default Dashboard;
