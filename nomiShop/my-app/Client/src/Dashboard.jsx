@@ -1,44 +1,86 @@
-// src/Dashboard.js
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Dashboard.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faHeart, faUser } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Dashboard.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faShoppingCart,
+  faHeart,
+  faUser,
+  faHome,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 
+// Sample product data
 const productsData = {
-  Furniture: [
-    { id: 1, name: 'Sofa', price: '$499', imgSrc: 'https://via.placeholder.com/150' },
-    { id: 2, name: 'Coffee Table', price: '$199', imgSrc: 'https://via.placeholder.com/150' }
+  Electronics: [
+    {
+      id: 1,
+      name: "Smartphone",
+      price: "$499",
+      imgSrc: "https://via.placeholder.com/150",
+    },
+    {
+      id: 2,
+      name: "Laptop",
+      price: "$999",
+      imgSrc: "https://via.placeholder.com/150",
+    },
   ],
-  Decor: [
-    { id: 3, name: 'Vase', price: '$49.99', imgSrc: 'https://via.placeholder.com/150' },
-    { id: 4, name: 'Wall Art', price: '$89.99', imgSrc: 'https://via.placeholder.com/150' }
+  Clothing: [
+    {
+      id: 3,
+      name: "T-shirt",
+      price: "$19.99",
+      imgSrc: "https://via.placeholder.com/150",
+    },
+    {
+      id: 4,
+      name: "Jeans",
+      price: "$39.99",
+      imgSrc: "https://via.placeholder.com/150",
+    },
   ],
-  Lighting: [
-    { id: 5, name: 'Table Lamp', price: '$79.99', imgSrc: 'https://via.placeholder.com/150' },
-    { id: 6, name: 'Chandelier', price: '$299.99', imgSrc: 'https://via.placeholder.com/150' }
+  "Home & Kitchen": [
+    {
+      id: 5,
+      name: "Blender",
+      price: "$59.99",
+      imgSrc: "https://via.placeholder.com/150",
+    },
+    {
+      id: 6,
+      name: "Cookware Set",
+      price: "$149.99",
+      imgSrc: "https://via.placeholder.com/150",
+    },
   ],
-  'Kitchen & Dining': [
-    { id: 7, name: 'Dinner Set', price: '$129.99', imgSrc: 'https://via.placeholder.com/150' },
-    { id: 8, name: 'Cookware Set', price: '$89.99', imgSrc: 'https://via.placeholder.com/150' }
+  Shoes: [
+    {
+      id: 7,
+      name: "Running Shoes",
+      price: "$79.99",
+      imgSrc: "https://via.placeholder.com/150",
+    },
+    {
+      id: 8,
+      name: "Boots",
+      price: "$129.99",
+      imgSrc: "https://via.placeholder.com/150",
+    },
   ],
-  Bedding: [
-    { id: 9, name: 'Comforter Set', price: '$99.99', imgSrc: 'https://via.placeholder.com/150' },
-    { id: 10, name: 'Pillow Set', price: '$39.99', imgSrc: 'https://via.placeholder.com/150' }
-  ]
 };
 
 const allProducts = [
-  ...productsData.Furniture,
-  ...productsData.Decor,
-  ...productsData.Lighting,
-  ...productsData['Kitchen & Dining'],
-  ...productsData.Bedding
+  ...productsData.Electronics,
+  ...productsData.Clothing,
+  ...productsData["Home & Kitchen"],
+  ...productsData.Shoes,
 ];
 
 const Dashboard = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const products = selectedCategory === 'All' ? allProducts : productsData[selectedCategory];
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const products =
+    selectedCategory === "All" ? allProducts : productsData[selectedCategory];
   const navigate = useNavigate();
 
   const handleCategoryChange = (category) => {
@@ -46,21 +88,46 @@ const Dashboard = () => {
   };
 
   const handleProfileClick = () => {
-    navigate('/profile');
+    navigate("/profile");
+  };
+
+  const handleNewItem = () => {
+    navigate("/newItemPage");
+  };
+
+  const handleAllItems = () => {
+    navigate("/allItems");
   };
 
   return (
     <div className="dashboard">
+      {/* Header with icons */}
       <header className="header">
-        <h1 className="site-title">NomiShop Online</h1>
+        {/* <h1 className="site-title">Nomi shop</h1> */}
+        <img
+          src=".\Server\uploads\nomi-shop-high-resolution-logo-black-transparent.png"
+          alt="Nomi Shop Logo"
+          className="site-logo"
+        />
         <div className="icons">
-          <button className="icon-button">
+          <button className="icon-button" id="home">
+            <FontAwesomeIcon icon={faHome} />
+          </button>
+          <button className="icon-button" id="shoppingCart">
             <FontAwesomeIcon icon={faShoppingCart} />
           </button>
-          <button className="icon-button">
+          <button className="icon-button" id="heart" onClick={handleNewItem}>
             <FontAwesomeIcon icon={faHeart} />
           </button>
-          <button className="icon-button" onClick={handleProfileClick}>
+          {/* onClick={handleSearch} */}
+          <button className="icon-button" id="search" onClick={handleAllItems}>
+            <FontAwesomeIcon icon={faSearch} />
+          </button>
+          <button
+            className="icon-button"
+            id="userProfile"
+            onClick={handleProfileClick}
+          >
             <FontAwesomeIcon icon={faUser} />
           </button>
         </div>
@@ -68,26 +135,62 @@ const Dashboard = () => {
 
       {/* Sliding message */}
       <section className="sliding-message">
-        <div className="message">🎉 Big Sale! Up to 50% off on selected items! 🎉</div>
+        <div className="message">
+          🎉 Big Sale! Up to 50% off on selected items! 🎉
+        </div>
       </section>
 
       {/* Categories Navbar */}
       <nav className="categories-navbar">
-        <button className={`nav-item ${selectedCategory === 'All' ? 'active' : ''}`} onClick={() => handleCategoryChange('All')}>All</button>
-        <button className={`nav-item ${selectedCategory === 'Furniture' ? 'active' : ''}`} onClick={() => handleCategoryChange('Furniture')}>Furniture</button>
-        <button className={`nav-item ${selectedCategory === 'Decor' ? 'active' : ''}`} onClick={() => handleCategoryChange('Decor')}>Decor</button>
-        <button className={`nav-item ${selectedCategory === 'Lighting' ? 'active' : ''}`} onClick={() => handleCategoryChange('Lighting')}>Lighting</button>
-        <button className={`nav-item ${selectedCategory === 'Kitchen & Dining' ? 'active' : ''}`} onClick={() => handleCategoryChange('Kitchen & Dining')}>Kitchen & Dining</button>
-        <button className={`nav-item ${selectedCategory === 'Bedding' ? 'active' : ''}`} onClick={() => handleCategoryChange('Bedding')}>Bedding</button>
+        <button
+          className={`nav-item ${selectedCategory === "All" ? "active" : ""}`}
+          onClick={() => handleCategoryChange("All")}
+        >
+          All
+        </button>
+        <button
+          className={`nav-item ${
+            selectedCategory === "Electronics" ? "active" : ""
+          }`}
+          onClick={() => handleCategoryChange("Electronics")}
+        >
+          Electronics
+        </button>
+        <button
+          className={`nav-item ${
+            selectedCategory === "Clothing" ? "active" : ""
+          }`}
+          onClick={() => handleCategoryChange("Clothing")}
+        >
+          Clothing
+        </button>
+        <button
+          className={`nav-item ${
+            selectedCategory === "Home & Kitchen" ? "active" : ""
+          }`}
+          onClick={() => handleCategoryChange("Home & Kitchen")}
+        >
+          Home & Kitchen
+        </button>
+        <button
+          className={`nav-item ${selectedCategory === "Shoes" ? "active" : ""}`}
+          onClick={() => handleCategoryChange("Shoes")}
+        >
+          Shoes
+        </button>
       </nav>
 
       {/* Product Showcase */}
       <section className="product-showcase">
         <h2 className="section-title">Featured Products</h2>
         <div className="product-list">
-          {products.map(product => (
+          {products.map((product) => (
             <div key={product.id} className="product-item">
-              <img src={product.imgSrc} alt={product.name} className="product-image" />
+              <img
+                src={product.imgSrc}
+                alt={product.name}
+                className="product-image"
+              />
               <div className="product-info">
                 <p className="product-name">{product.name}</p>
                 <p className="product-price">{product.price}</p>
