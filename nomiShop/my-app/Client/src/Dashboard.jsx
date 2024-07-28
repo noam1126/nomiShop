@@ -6,6 +6,8 @@ import {
   faShoppingCart,
   faHeart,
   faUser,
+  faHome,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Sample product data
@@ -93,17 +95,28 @@ const Dashboard = () => {
     navigate("/itemPage");
   };
 
+  const handleAllItems = () => {
+    navigate("/allItems");
+  };
+
   return (
     <div className="dashboard">
       {/* Header with icons */}
       <header className="header">
         <h1 className="site-title">Nomi shop</h1>
         <div className="icons">
+          <button className="icon-button" id="home">
+            <FontAwesomeIcon icon={faHome} />
+          </button>
           <button className="icon-button" id="shoppingCart">
             <FontAwesomeIcon icon={faShoppingCart} />
           </button>
           <button className="icon-button" id="heart" onClick={handleNewItem}>
             <FontAwesomeIcon icon={faHeart} />
+          </button>
+          {/* onClick={handleSearch} */}
+          <button className="icon-button" id="search" onClick={handleAllItems}>
+            <FontAwesomeIcon icon={faSearch} />
           </button>
           <button
             className="icon-button"

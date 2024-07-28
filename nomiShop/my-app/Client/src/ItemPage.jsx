@@ -5,6 +5,8 @@ import {
   faShoppingCart,
   faHeart,
   faUser,
+  faHome,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 
 function ItemPage() {
@@ -56,7 +58,7 @@ function ItemPage() {
       });
   };
 
-  const handleAddItemClick = () => {
+  const handleHomeClick = () => {
     navigate("/dashboard");
   };
 
@@ -69,11 +71,17 @@ function ItemPage() {
       <header className="header">
         <h1 className="site-title">Nomi shop</h1>
         <div className="icons">
+          <button className="icon-button" id="home" onClick={handleHomeClick}>
+            <FontAwesomeIcon icon={faHome} />
+          </button>
           <button className="icon-button" id="shoppingCart">
             <FontAwesomeIcon icon={faShoppingCart} />
           </button>
           <button className="icon-button" id="heart">
             <FontAwesomeIcon icon={faHeart} />
+          </button>
+          <button className="icon-button" id="search">
+            <FontAwesomeIcon icon={faSearch} />
           </button>
           <button
             className="icon-button"
@@ -154,7 +162,6 @@ function ItemPage() {
                 >
                   <option value="">Select Category</option>
                   <option value="electronics">Electronics</option>
-                  <option value="fashion">Fashion</option>
                   <option value="home">Home</option>
                   <option value="books">Books</option>
                   <option value="toys">Toys</option>

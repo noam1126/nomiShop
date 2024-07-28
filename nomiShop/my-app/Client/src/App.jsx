@@ -7,6 +7,7 @@ import Login from "./Login";
 import Dashboard from "./Dashboard";
 import ProfilePage from "./ProfilePage";
 import ItemPage from "./ItemPage";
+import ItemsListPage from "./ItemsListPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/itemPage" element={<ItemPage />} />
+        <Route path="/allItems" element={<ItemsListPage />} />
       </Routes>
     </BrowserRouter>
   );

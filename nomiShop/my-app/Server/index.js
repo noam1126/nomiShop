@@ -2,10 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
-const UserModel = require("./model/ShopUser");
-const ItemData = require("./model/ItemData");
 const fs = require("fs");
 const path = require("path");
+const UserModel = require("./model/ShopUser");
+const ItemData = require("./model/ItemData");
 
 const app = express();
 app.use(express.json());
@@ -16,6 +16,9 @@ const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
+
+// Serve static files from the uploads directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Configure Multer
 const storage = multer.diskStorage({
@@ -76,6 +79,19 @@ app.post("/itemPage", upload.single("image"), (req, res) => {
   }
 
   ItemData.create({ name, price, description, category, image })
+    .then((items) => res.json(items))
+    .catch((err) => res.json(err));
+});
+
+app.get("/allItems", (req, res) => {
+  ItemData.find()
+    .then((items) => res.json(items))
+    .catch((err) => res.json(err));
+});
+
+app.get("/allItems/category/:category", (req, res) => {
+  const { category } = req.params;
+  ItemData.find({ category })
     .then((items) => res.json(items))
     .catch((err) => res.json(err));
 });
