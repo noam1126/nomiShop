@@ -1,50 +1,81 @@
-import React, { useState } from 'react';
-import './SellerProfilePage.css';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './SellerProfile.css';
 
 const SellerProfilePage = () => {
-  const [orders] = useState([
-    { id: 1, product: 'Smartphone', date: '2024-01-15', amount: '$499' },
-    { id: 2, product: 'Running Shoes', date: '2024-02-20', amount: '$79.99' }
-  ]);
+  const [orders, setOrders] = useState([]);
+  const [userDetails, setUserDetails] = useState(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
-  const [userDetails, setUserDetails] = useState({
-    name: 'John Doe',
-    email: 'john@example.com',
-    address: '123 Main St, Anytown, USA'
-  });
+  // Fetch user details, orders, and products
+  useEffect(() => {
+    const userId = '66a65e82f08709b07acbe119'; // Replace with actual userId logic
 
-  const [products] = useState([
-    { id: 1, name: 'Product 1', amount: 10, price: '$50' },
-    { id: 2, name: 'Product 2', amount: 5, price: '$30' },
-    // Add more products as needed
-  ]);
+    const fetchUserDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/user/${userId}`);
+        setUserDetails(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user details:', error);
+      }
+    };
 
-  const handleDeleteAccount = () => {
-    // Implement account deletion logic here
-    alert('Account deleted');
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/orders/${userId}`);
+        setOrders(response.data);
+      } catch (error) {
+        console.error('Failed to fetch orders:', error);
+      }
+    };
+
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/allItems`);
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      }
+    };
+
+    fetchUserDetails();
+    fetchOrders();
+    fetchProducts();
+  }, []);
+
+  const handleDeleteAccount = async () => {
+    if (!userDetails || !userDetails._id) {
+      console.error('User details are missing or invalid.');
+      return;
+    }
+
+    try {
+      await axios.delete(`http://localhost:3001/deleteUser/${userDetails._id}`);
+      navigate('/register'); // Redirect to registration page after deletion
+    } catch (error) {
+      console.error('Failed to delete account:', error);
+    }
   };
 
   const handleAddItem = () => {
-    // Implement add item logic here
-    alert('Add item clicked');
+    navigate('/newItemPage'); // Navigate to the NewItemPage
   };
+
+  if (!userDetails) {
+    return <div className="loading">Loading...</div>;
+  }
 
   return (
     <div className="profile-page">
-      <h1>Seller Profile Page</h1>
-      
-      <section className="section orders-section">
-        <h2>My Past Orders</h2>
-        <ul>
-          {orders.map(order => (
-            <li key={order.id}>
-              <p>Product: {order.product}</p>
-              <p>Date: {order.date}</p>
-              <p>Amount: {order.amount}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <header className="profile-header">
+        <h1>Hi, {userDetails.name}</h1>
+        <button className="delete-button" onClick={() => setShowConfirmDialog(true)}>
+          Delete Account
+        </button>
+      </header>
 
       <section className="section details-section">
         <h2>My Details</h2>
@@ -53,11 +84,17 @@ const SellerProfilePage = () => {
         <p><strong>Address:</strong> {userDetails.address}</p>
       </section>
 
-      <section className="section delete-section">
-        <h2>Delete Account</h2>
-        <button className="delete-button" onClick={handleDeleteAccount}>
-          Delete Account
-        </button>
+      <section className="section orders-section">
+        <h2>My Past Orders</h2>
+        <ul>
+          {orders.map(order => (
+            <li key={order.id} className="order-item">
+              <p><strong>Product:</strong> {order.product}</p>
+              <p><strong>Date:</strong> {order.date}</p>
+              <p><strong>Amount:</strong> {order.amount}</p>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="section products-section">
@@ -65,16 +102,34 @@ const SellerProfilePage = () => {
         <button className="add-item-button" onClick={handleAddItem}>
           Add Item for Sale
         </button>
-        <ul>
-          {products.map(product => (
-            <li key={product.id}>
-              <p>Name: {product.name}</p>
-              <p>Amount: {product.amount}</p>
-              <p>Price: {product.price}</p>
-            </li>
-          ))}
-        </ul>
+        <div className="product-list">
+          {products.length > 0 ? (
+            products.map(product => {
+              const imageUrl = `http://localhost:3001/uploads/${product.image}`; // Adjust path as necessary
+              return (
+                <div key={product._id} className="product-item">
+                  <img src={imageUrl} alt={product.name} className="product-image" />
+                  <div className="product-info">
+                    <p className="product-name">{product.name}</p>
+                    <p className="product-price">Price: ${product.price}</p>
+                    <p className="product-description">{product.description}</p>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p>No products available</p>
+          )}
+        </div>
       </section>
+
+      {showConfirmDialog && (
+        <div className="confirm-dialog">
+          <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+          <button onClick={handleDeleteAccount}>Yes, Delete</button>
+          <button onClick={() => setShowConfirmDialog(false)}>Cancel</button>
+        </div>
+      )}
     </div>
   );
 };

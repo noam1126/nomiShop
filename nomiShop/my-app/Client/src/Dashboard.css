@@ -1,10 +1,11 @@
+
 .dashboard {
-  font-family: "Arial", sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
 
-.header {
+.dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,17 +14,19 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.site-title {
-  font-size: 1.5rem;
-  color: #333;
+.dashboard-header .site-logo {
+  width: 1px;  /* Adjust this value as needed */
+  height: auto;  /* Maintain aspect ratio */
+  object-fit: contain;  /* Ensure the logo is contained within the given dimensions */
 }
 
-.icons {
+
+.dashboard-header .icons {
   display: flex;
   gap: 1rem;
 }
 
-.icon-button {
+.dashboard-header .icon-button {
   background: none;
   border: none;
   cursor: pointer;
@@ -32,7 +35,7 @@
   transition: color 0.3s;
 }
 
-.icon-button:hover {
+.dashboard-header .icon-button:hover {
   color: #0056b3;
 }
 
@@ -44,6 +47,7 @@
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 1rem 0;
+  cursor: pointer;
 }
 
 @keyframes slide {
@@ -60,39 +64,22 @@
   white-space: nowrap;
   animation: slide 10s linear infinite;
 }
-
-.categories-navbar {
-  display: flex;
-  justify-content: center;
-  background-color: #f8f8f8;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.nav-item {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  color: #333;
-  padding: 0.5rem 1rem;
-  margin: 0 0.5rem;
+.explore-banner {
+  text-align: center;
+  margin: 1.5rem 0;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  transition: background-color 0.3s, border-color 0.3s;
 }
 
-.nav-item:hover {
-  background-color: #f0f0f0;
-  border-color: #ccc;
+.explore-banner-image {
+  width: 100%;
+  max-width: 1350px; /* Increase the max-width for a larger banner */
+  height: auto;
+  display: inline-block;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.nav-item.active {
-  background-color: #007bff;
-  color: #ffffff;
-  border-color: #007bff;
-}
-
-.product-showcase {
+.latest-items {
   padding: 2rem;
 }
 
@@ -100,6 +87,7 @@
   font-size: 1.25rem;
   margin-bottom: 1rem;
   color: #333;
+  text-align: center;
 }
 
 .product-list {
@@ -142,4 +130,9 @@
 .product-price {
   font-size: 0.875rem;
   color: #007bff;
+}
+
+.card-text {
+  font-size: 0.875rem;
+  color: #666;
 }

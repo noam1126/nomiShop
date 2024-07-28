@@ -1,49 +1,66 @@
-// src/ProfilePage.js
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ProfilePage.css';
+import axios from 'axios';
+import './ProfilePage.css'; // Make sure to create this CSS file or adjust as needed
 
-const ProfilePage = ({ user }) => {
-  const [orders] = useState([
-    { id: 1, product: 'Smartphone', date: '2024-01-15', amount: '$499' },
-    { id: 2, product: 'Running Shoes', date: '2024-02-20', amount: '$79.99' }
-  ]);
-
-  const [userDetails, setUserDetails] = useState({
-    name: user.name,
-    email: user.email,
-    address: 'Moshe Dayan 93 St, Holon, Israel'
-  });
-
+const BuyerProfilePage = () => {
+  const [orders, setOrders] = useState([]);
+  const [userDetails, setUserDetails] = useState(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const navigate = useNavigate();
 
+  // Fetch user details and orders
+  useEffect(() => {
+    const userId = '66a65e82f08709b07acbe119'; // Replace with actual userId logic
+
+    const fetchUserDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/user/${userId}`);
+        setUserDetails(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user details:', error);
+      }
+    };
+
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/orders/${userId}`);
+        setOrders(response.data);
+      } catch (error) {
+        console.error('Failed to fetch orders:', error);
+      }
+    };
+
+    fetchUserDetails();
+    fetchOrders();
+  }, []);
+
   const handleDeleteAccount = async () => {
+    if (!userDetails || !userDetails._id) {
+      console.error('User details are missing or invalid.');
+      return;
+    }
+
     try {
-      await axios.delete(`http://localhost:3001/deleteUser/${user._id}`);
-      navigate('/signup'); // Redirect to signup or login page after deletion
+      await axios.delete(`http://localhost:3001/deleteUser/${userDetails._id}`);
+      navigate('/register'); // Redirect to registration page after deletion
     } catch (error) {
       console.error('Failed to delete account:', error);
     }
   };
 
+  if (!userDetails) {
+    return <div className="loading">Loading...</div>;
+  }
+
   return (
     <div className="profile-page">
-      <h1>Profile Page</h1>
-      
-      <section className="section orders-section">
-        <h2>My Past Orders</h2>
-        <ul>
-          {orders.map(order => (
-            <li key={order.id}>
-              <p>Product: {order.product}</p>
-              <p>Date: {order.date}</p>
-              <p>Amount: {order.amount}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <header className="profile-header">
+        <h1>Hi, {userDetails.name}</h1>
+        <button className="delete-button" onClick={() => setShowConfirmDialog(true)}>
+          Delete Account
+        </button>
+      </header>
 
       <section className="section details-section">
         <h2>My Details</h2>
@@ -52,11 +69,17 @@ const ProfilePage = ({ user }) => {
         <p><strong>Address:</strong> {userDetails.address}</p>
       </section>
 
-      <section className="section delete-section">
-        <h2>Delete Account</h2>
-        <button className="delete-button" onClick={() => setShowConfirmDialog(true)}>
-          Delete Account
-        </button>
+      <section className="section orders-section">
+        <h2>My Past Orders</h2>
+        <ul>
+          {orders.map(order => (
+            <li key={order.id} className="order-item">
+              <p><strong>Product:</strong> {order.product}</p>
+              <p><strong>Date:</strong> {order.date}</p>
+              <p><strong>Amount:</strong> {order.amount}</p>
+            </li>
+          ))}
+        </ul>
       </section>
 
       {showConfirmDialog && (
@@ -70,4 +93,4 @@ const ProfilePage = ({ user }) => {
   );
 };
 
-export default ProfilePage;
+export default BuyerProfilePage;

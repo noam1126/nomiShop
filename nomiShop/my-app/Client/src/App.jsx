@@ -5,10 +5,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from "./Signup";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
-import ProfilePage from "./ProfilePage";
+import ProfilePage from './ProfilePage'; // Ensure this path is correct
 import ItemDetailsPage from "./ItemDetailsPage";
 import ItemsListPage from "./ItemsListPage";
 import NewItemPage from "./NewItemPage";
+import SellerProfile from "./SellerProfile";
 
 function App() {
   return (
@@ -18,8 +19,10 @@ function App() {
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/sellerProfile" element={<SellerProfile/>} />
+        <Route path="/buyerProfile" element={<ProfilePage />} />
         <Route path="/newItemPage" element={<NewItemPage />} />
+        <Route path="/itemsListPage" element={<ItemsListPage />} />
         <Route path="/allItems" element={<ItemsListPage />} />
         <Route path="/item/:id" element={<ItemDetailsPage />} />
       </Routes>

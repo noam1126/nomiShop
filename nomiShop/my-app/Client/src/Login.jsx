@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import Dashboard from "./Dashboard";
 
 function Login() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -14,12 +12,12 @@ function Login() {
     axios
       .post("http://localhost:3001/login", { email, password })
       .then((result) => {
-        console.log(result);
-        if (result.data === "Success") {
+        if (result.data.message === "Success") {
+          localStorage.setItem("userType", result.data.userType);
           navigate("/dashboard");
         } else {
           navigate("/register");
-          alert("You are not registered to this service");
+          alert(result.data.message);
         }
       })
       .catch((err) => console.log(err));
@@ -46,7 +44,7 @@ function Login() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="email">
+            <label htmlFor="password">
               <strong>Password</strong>
             </label>
             <input
