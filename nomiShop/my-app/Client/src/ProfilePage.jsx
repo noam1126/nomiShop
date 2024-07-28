@@ -1,20 +1,31 @@
+// src/ProfilePage.js
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
 
-const ProfilePage = () => {
+const ProfilePage = ({ user }) => {
   const [orders] = useState([
     { id: 1, product: 'Smartphone', date: '2024-01-15', amount: '$499' },
     { id: 2, product: 'Running Shoes', date: '2024-02-20', amount: '$79.99' }
   ]);
 
   const [userDetails, setUserDetails] = useState({
-    name: 'Mil Seg',
-    email: 'miliseg12@example.com',
+    name: user.name,
+    email: user.email,
     address: 'Moshe Dayan 93 St, Holon, Israel'
   });
 
-  const handleDeleteAccount = () => {
-    alert('Account deleted');
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const navigate = useNavigate();
+
+  const handleDeleteAccount = async () => {
+    try {
+      await axios.delete(`http://localhost:3001/deleteUser/${user._id}`);
+      navigate('/signup'); // Redirect to signup or login page after deletion
+    } catch (error) {
+      console.error('Failed to delete account:', error);
+    }
   };
 
   return (
@@ -43,10 +54,18 @@ const ProfilePage = () => {
 
       <section className="section delete-section">
         <h2>Delete Account</h2>
-        <button className="delete-button" onClick={handleDeleteAccount}>
+        <button className="delete-button" onClick={() => setShowConfirmDialog(true)}>
           Delete Account
         </button>
       </section>
+
+      {showConfirmDialog && (
+        <div className="confirm-dialog">
+          <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+          <button onClick={handleDeleteAccount}>Yes, Delete</button>
+          <button onClick={() => setShowConfirmDialog(false)}>Cancel</button>
+        </div>
+      )}
     </div>
   );
 };
