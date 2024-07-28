@@ -1,0 +1,13 @@
+.ValidationLable {
+  color: red;
+}
+
+.hide {
+  color: red;
+  visibility: hidden;
+}
+
+.show {
+  color: red;
+  visibility: visible;
+}

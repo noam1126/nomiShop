@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const UserModel = require("./model/ShopUser.js");
+const ItemData = require("./model/ItemData.js");
 
 const app = express();
 app.use(express.json());
@@ -34,6 +35,13 @@ app.post("/register", (req, res) => {
   console.log("register started...");
   UserModel.create(req.body)
     .then((users) => res.json(users))
+    .catch((err) => res.json(err));
+});
+
+app.post("/itemPage", (req, res) => {
+  console.log("add item started...");
+  ItemData.create(req.body)
+    .then((items) => res.json(items))
     .catch((err) => res.json(err));
 });
 

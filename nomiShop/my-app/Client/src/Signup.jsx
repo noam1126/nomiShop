@@ -4,15 +4,21 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Signup() {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [buyerOrSeller, setBuyerOrSeller] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/register", { name, email, password })
+      .post("http://localhost:3001/register", {
+        name,
+        email,
+        password,
+        buyerOrSeller,
+      })
       .then((result) => {
         console.log(result);
         navigate("/login");
@@ -29,14 +35,14 @@ function Signup() {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="email">
+            <label htmlFor="name">
               <strong>Name</strong>
             </label>
             <input
               type="text"
               placeholder="Enter Name"
               autoComplete="off"
-              name="email"
+              name="name"
               className="form-control rounded-0"
               onChange={(e) => setName(e.target.value)}
             />
@@ -55,7 +61,7 @@ function Signup() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="email">
+            <label htmlFor="password">
               <strong>Password</strong>
             </label>
             <input
@@ -65,6 +71,39 @@ function Signup() {
               className="form-control rounded-0"
               onChange={(e) => setPassword(e.target.value)}
             />
+          </div>
+          <div className="mb-3">
+            <label>
+              <strong>Are you a buyer or seller?</strong>
+            </label>
+            <div className="form-check">
+              <input
+                type="radio"
+                id="buyer"
+                name="buyerOrSeller"
+                value="buyer"
+                className="form-check-input"
+                onChange={(e) => setBuyerOrSeller(e.target.value)}
+                checked={buyerOrSeller === "buyer"}
+              />
+              <label htmlFor="buyer" className="form-check-label">
+                Buyer
+              </label>
+            </div>
+            <div className="form-check">
+              <input
+                type="radio"
+                id="seller"
+                name="buyerOrSeller"
+                value="seller"
+                className="form-check-input"
+                onChange={(e) => setBuyerOrSeller(e.target.value)}
+                checked={buyerOrSeller === "seller"}
+              />
+              <label htmlFor="seller" className="form-check-label">
+                Seller
+              </label>
+            </div>
           </div>
           <button type="submit" className="btn btn-success w-100 rounded-0">
             Sign Up
