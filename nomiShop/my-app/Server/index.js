@@ -1,19 +1,40 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const UserModel = require("./model/ShopUser.js");
-const ItemData = require("./model/ItemData.js");
+const multer = require("multer");
+const UserModel = require("./model/ShopUser");
+const ItemData = require("./model/ItemData");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+// Ensure the 'uploads' directory exists
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// Configure Multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const mongoURI =
   "mongodb+srv://milisegal123:nomi2468@cluster.loiazet.mongodb.net/usersData";
 
 mongoose
   .connect(mongoURI)
-  .then((x) => console.log("connected successfully"))
+  .then(() => console.log("connected successfully"))
   .catch((e) => console.error(e));
 
 app.post("/login", (req, res) => {
@@ -38,9 +59,23 @@ app.post("/register", (req, res) => {
     .catch((err) => res.json(err));
 });
 
-app.post("/itemPage", (req, res) => {
+app.post("/itemPage", upload.single("image"), (req, res) => {
   console.log("add item started...");
-  ItemData.create(req.body)
+  const { name, price, description, category } = req.body;
+  const image = req.file ? req.file.path : null;
+
+  if (!name || !price || !description || !category || !image) {
+    return res.status(400).json({
+      error: "All fields are required",
+      name: !!name,
+      price: !!price,
+      description: !!description,
+      category: !!category,
+      image: !!image,
+    });
+  }
+
+  ItemData.create({ name, price, description, category, image })
     .then((items) => res.json(items))
     .catch((err) => res.json(err));
 });
@@ -51,5 +86,5 @@ app.get("/test", (req, res) => {
 });
 
 app.listen(3001, () => {
-  console.log("server is running");
+  console.log("server is running on port 3001");
 });

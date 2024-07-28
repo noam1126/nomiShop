@@ -6,7 +6,7 @@ const ItemDataSchema = new mongoose.Schema({
     required: true,
   },
   price: {
-    type: Number, // Use Number for prices
+    type: Number,
     required: true,
   },
   description: {

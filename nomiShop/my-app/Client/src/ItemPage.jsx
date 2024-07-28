@@ -55,12 +55,13 @@ function ItemPage() {
         console.error("There was an error uploading the item!", error);
       });
   };
-  const handleProfileClick = () => {
-    navigate("/profile");
-  };
 
   const handleAddItemClick = () => {
     navigate("/dashboard");
+  };
+
+  const handleProfileClick = () => {
+    navigate("/profile");
   };
 
   return (
