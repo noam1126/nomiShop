@@ -105,7 +105,7 @@ const Dashboard = () => {
       <header className="header">
         {/* <h1 className="site-title">Nomi shop</h1> */}
         <img
-          src=".\Server\uploads\nomi-shop-high-resolution-logo-black-transparent.png"
+          src="/nomi-shop-high-resolution-logo-black-transparent.png"
           alt="Nomi Shop Logo"
           className="site-logo"
         />

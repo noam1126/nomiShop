@@ -66,10 +66,18 @@ function NewItemPage() {
     navigate("/profile");
   };
 
+  const handleAllItems = () => {
+    navigate("/allItems");
+  };
+
   return (
     <div className="newItemPage">
       <header className="header">
-        <h1 className="site-title">Nomi shop</h1>
+        <img
+          src="/nomi-shop-high-resolution-logo-black-transparent.png"
+          alt="Nomi Shop Logo"
+          className="site-logo"
+        />
         <div className="icons">
           <button className="icon-button" id="home" onClick={handleHomeClick}>
             <FontAwesomeIcon icon={faHome} />
@@ -80,7 +88,7 @@ function NewItemPage() {
           <button className="icon-button" id="heart">
             <FontAwesomeIcon icon={faHeart} />
           </button>
-          <button className="icon-button" id="search">
+          <button className="icon-button" id="search" onClick={handleAllItems}>
             <FontAwesomeIcon icon={faSearch} />
           </button>
           <button

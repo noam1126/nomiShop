@@ -67,7 +67,7 @@ function ItemsListPage() {
   };
 
   const handleNewItem = () => {
-    navigate("/itemPage");
+    navigate("/newItemPage");
   };
 
   const handleAllItems = () => {
@@ -81,7 +81,11 @@ function ItemsListPage() {
   return (
     <div className="dashboard">
       <header className="header">
-        <h1 className="site-title">Nomi shop</h1>
+        <img
+          src="/nomi-shop-high-resolution-logo-black-transparent.png"
+          alt="Nomi Shop Logo"
+          className="site-logo"
+        />
         <div className="icons">
           <button className="icon-button" id="home">
             <FontAwesomeIcon icon={faHome} />
@@ -105,6 +109,16 @@ function ItemsListPage() {
         </div>
       </header>
 
+      <div className="search-bar">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search for products..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </div>
+
       <nav className="categories-navbar">
         <button
           className={`nav-item ${selectedCategory === "All" ? "active" : ""}`}
@@ -124,16 +138,6 @@ function ItemsListPage() {
           </button>
         ))}
       </nav>
-
-      <div className="search-bar">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Search for products..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
-      </div>
 
       <section className="product-showcase">
         <div className="product-list">
