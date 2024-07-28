@@ -74,6 +74,10 @@ function ItemsListPage() {
     navigate("/allItems");
   };
 
+  const handleItemClick = (id) => {
+    navigate(`/item/${id}`);
+  };
+
   return (
     <div className="dashboard">
       <header className="header">
@@ -101,16 +105,6 @@ function ItemsListPage() {
         </div>
       </header>
 
-      <div className="search-bar">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Search for products..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
-      </div>
-
       <nav className="categories-navbar">
         <button
           className={`nav-item ${selectedCategory === "All" ? "active" : ""}`}
@@ -131,12 +125,26 @@ function ItemsListPage() {
         ))}
       </nav>
 
+      <div className="search-bar">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search for products..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </div>
+
       <section className="product-showcase">
         <div className="product-list">
           {filteredItems.map((item) => {
             const imageUrl = `http://localhost:3001/${item.image}`;
             return (
-              <div key={item._id} className="product-item">
+              <div
+                key={item._id}
+                className="product-item"
+                onClick={() => handleItemClick(item._id)}
+              >
                 <img src={imageUrl} alt={item.name} className="product-image" />
                 <div className="product-info">
                   <p className="product-name">{item.name}</p>

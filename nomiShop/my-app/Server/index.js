@@ -62,7 +62,7 @@ app.post("/register", (req, res) => {
     .catch((err) => res.json(err));
 });
 
-app.post("/itemPage", upload.single("image"), (req, res) => {
+app.post("/newItemPage", upload.single("image"), (req, res) => {
   console.log("add item started...");
   const { name, price, description, category } = req.body;
   const image = req.file ? req.file.path : null;
@@ -94,6 +94,13 @@ app.get("/allItems/category/:category", (req, res) => {
   ItemData.find({ category })
     .then((items) => res.json(items))
     .catch((err) => res.json(err));
+});
+
+app.get("/item/:id", (req, res) => {
+  const { id } = req.params;
+  ItemData.findById(id)
+    .then((item) => res.json(item))
+    .catch((err) => res.status(500).json({ error: err.message }));
 });
 
 app.get("/test", (req, res) => {

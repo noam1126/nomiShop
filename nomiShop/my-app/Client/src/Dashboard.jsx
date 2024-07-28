@@ -92,7 +92,7 @@ const Dashboard = () => {
   };
 
   const handleNewItem = () => {
-    navigate("/itemPage");
+    navigate("/newItemPage");
   };
 
   const handleAllItems = () => {
@@ -103,7 +103,12 @@ const Dashboard = () => {
     <div className="dashboard">
       {/* Header with icons */}
       <header className="header">
-        <h1 className="site-title">Nomi shop</h1>
+        {/* <h1 className="site-title">Nomi shop</h1> */}
+        <img
+          src=".\Server\uploads\nomi-shop-high-resolution-logo-black-transparent.png"
+          alt="Nomi Shop Logo"
+          className="site-logo"
+        />
         <div className="icons">
           <button className="icon-button" id="home">
             <FontAwesomeIcon icon={faHome} />

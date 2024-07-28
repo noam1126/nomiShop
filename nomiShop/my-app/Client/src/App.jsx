@@ -6,8 +6,9 @@ import Signup from "./Signup";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import ProfilePage from "./ProfilePage";
-import ItemPage from "./ItemPage";
+import ItemDetailsPage from "./ItemDetailsPage";
 import ItemsListPage from "./ItemsListPage";
+import NewItemPage from "./NewItemPage";
 
 function App() {
   return (
@@ -18,8 +19,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/itemPage" element={<ItemPage />} />
+        <Route path="/newItemPage" element={<NewItemPage />} />
         <Route path="/allItems" element={<ItemsListPage />} />
+        <Route path="/item/:id" element={<ItemDetailsPage />} />
       </Routes>
     </BrowserRouter>
   );

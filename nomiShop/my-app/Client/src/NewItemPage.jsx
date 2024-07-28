@@ -9,7 +9,7 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 
-function ItemPage() {
+function NewItemPage() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -38,7 +38,7 @@ function ItemPage() {
     formData.append("category", category);
     formData.append("image", image);
     axios
-      .post("http://localhost:3001/itemPage", formData, {
+      .post("http://localhost:3001/newItemPage", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -67,7 +67,7 @@ function ItemPage() {
   };
 
   return (
-    <div className="itemPage">
+    <div className="newItemPage">
       <header className="header">
         <h1 className="site-title">Nomi shop</h1>
         <div className="icons">
@@ -177,4 +177,4 @@ function ItemPage() {
     </div>
   );
 }
-export default ItemPage;
+export default NewItemPage;

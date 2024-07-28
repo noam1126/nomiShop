@@ -1,0 +1,91 @@
+/* ItemDetailsPage.css */
+
+.itemDetailsPage {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+}
+
+.header .site-title {
+  font-size: 24px;
+  margin: 0;
+}
+
+.header .icons {
+  display: flex;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  color: #ddd;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.container h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.container .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.container .col-md-6 {
+  flex: 1;
+  min-width: 300px;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  max-height: 300px; /* Adjust the height as needed */
+}
+
+.itemDetailsPage .item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.itemDetailsPage .item-info p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.itemDetailsPage .item-info h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.mt-5 {
+  margin-top: 3rem !important;
+}
