@@ -9,6 +9,7 @@ import ProfilePage from "./ProfilePage";
 import ItemDetailsPage from "./ItemDetailsPage";
 import ItemsListPage from "./ItemsListPage";
 import NewItemPage from "./NewItemPage";
+import CartPage from "./CartPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/newItemPage" element={<NewItemPage />} />
         <Route path="/allItems" element={<ItemsListPage />} />
         <Route path="/item/:id" element={<ItemDetailsPage />} />
+        <Route path="/shoppingCart" element={<CartPage />} />
       </Routes>
     </BrowserRouter>
   );

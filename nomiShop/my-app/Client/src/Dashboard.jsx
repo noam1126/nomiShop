@@ -99,6 +99,10 @@ const Dashboard = () => {
     navigate("/allItems");
   };
 
+  const handleCart = () => {
+    navigate("/shoppingCart");
+  };
+
   return (
     <div className="dashboard">
       {/* Header with icons */}
@@ -113,7 +117,11 @@ const Dashboard = () => {
           <button className="icon-button" id="home">
             <FontAwesomeIcon icon={faHome} />
           </button>
-          <button className="icon-button" id="shoppingCart">
+          <button
+            className="icon-button"
+            id="shoppingCart"
+            onClick={handleCart}
+          >
             <FontAwesomeIcon icon={faShoppingCart} />
           </button>
           <button className="icon-button" id="heart" onClick={handleNewItem}>

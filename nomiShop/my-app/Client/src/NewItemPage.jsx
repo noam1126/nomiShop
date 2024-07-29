@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -26,6 +27,8 @@ function NewItemPage() {
     };
     reader.readAsDataURL(file);
   };
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();

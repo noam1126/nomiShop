@@ -78,6 +78,14 @@ function ItemsListPage() {
     navigate(`/item/${id}`);
   };
 
+  const handleHomeClick = () => {
+    navigate("/dashboard");
+  };
+
+  const handleCartClick = () => {
+    navigate("/shoppingCart");
+  };
+
   return (
     <div className="dashboard">
       <header className="header">
@@ -87,10 +95,14 @@ function ItemsListPage() {
           className="site-logo"
         />
         <div className="icons">
-          <button className="icon-button" id="home">
+          <button className="icon-button" id="home" onClick={handleHomeClick}>
             <FontAwesomeIcon icon={faHome} />
           </button>
-          <button className="icon-button" id="shoppingCart">
+          <button
+            className="icon-button"
+            id="shoppingCart"
+            onClick={handleCartClick}
+          >
             <FontAwesomeIcon icon={faShoppingCart} />
           </button>
           <button className="icon-button" id="heart" onClick={handleNewItem}>

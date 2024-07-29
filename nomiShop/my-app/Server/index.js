@@ -6,21 +6,19 @@ const fs = require("fs");
 const path = require("path");
 const UserModel = require("./model/ShopUser");
 const ItemData = require("./model/ItemData");
+const Cart = require("./model/CartModel");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Ensure the 'uploads' directory exists
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-// Serve static files from the uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Configure Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -39,6 +37,8 @@ mongoose
   .connect(mongoURI)
   .then(() => console.log("connected successfully"))
   .catch((e) => console.error(e));
+
+// Existing routes...
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -100,6 +100,42 @@ app.get("/item/:id", (req, res) => {
   const { id } = req.params;
   ItemData.findById(id)
     .then((item) => res.json(item))
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+
+app.get("/shoppingCart/:userId", (req, res) => {
+  const { userId } = req.params;
+
+  Cart.find({ userId })
+    .then((cartItems) => res.json(cartItems))
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+
+// app.post("/shoppingCart", (req, res) => {
+//   const { item } = req.body;
+//   if (!item) {
+//     return res.status(400).json({ error: "Item is required" });
+//   }
+//   CartModel.create(item)
+//     .then((cartItem) => res.json(cartItem))
+//     .catch((err) => res.status(500).json({ error: err.message }));
+// });
+
+app.post("/shoppingCart", (req, res) => {
+  const { userId, item } = req.body; // Expect userId and item details
+
+  const cartItem = new Cart({
+    userId,
+    name: item.name,
+    price: item.price,
+    description: item.description,
+    category: item.category,
+    image: item.image,
+  });
+
+  cartItem
+    .save()
+    .then(() => res.status(200).json("Item added to cart!"))
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 

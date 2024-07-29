@@ -33,6 +33,19 @@ function ItemDetailsPage() {
     navigate("/profile");
   };
 
+  const handleAddToCart = () => {
+    const userId = "your-user-id"; // Replace with the actual userId from your auth system
+    axios
+      .post("http://localhost:3001/shoppingCart", { userId, item })
+      .then((response) => {
+        console.log("Item added to cart:", response.data);
+        navigate("/shoppingCart");
+      })
+      .catch((error) => {
+        console.error("There was an error adding the item to the cart!", error);
+      });
+  };
+
   if (!item) return <div>Loading...</div>;
 
   const imageUrl = `http://localhost:3001/${item.image}`;
@@ -45,7 +58,11 @@ function ItemDetailsPage() {
           <button className="icon-button" id="home" onClick={handleHomeClick}>
             <FontAwesomeIcon icon={faHome} />
           </button>
-          <button className="icon-button" id="shoppingCart">
+          <button
+            className="icon-button"
+            id="shoppingCart"
+            onClick={() => navigate("/shoppingCart")}
+          >
             <FontAwesomeIcon icon={faShoppingCart} />
           </button>
           <button className="icon-button" id="heart">
@@ -73,6 +90,13 @@ function ItemDetailsPage() {
             <p>Price: ${item.price}</p>
             <p>{item.description}</p>
             <p>Category: {item.category}</p>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleAddToCart}
+            >
+              Add to cart
+            </button>
           </div>
         </div>
       </div>
