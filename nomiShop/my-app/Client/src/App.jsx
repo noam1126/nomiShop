@@ -10,22 +10,25 @@ import ItemDetailsPage from "./ItemDetailsPage";
 import ItemsListPage from "./ItemsListPage";
 import NewItemPage from "./NewItemPage";
 import CartPage from "./CartPage";
+import { UserProvider } from "./UserContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/newItemPage" element={<NewItemPage />} />
-        <Route path="/allItems" element={<ItemsListPage />} />
-        <Route path="/item/:id" element={<ItemDetailsPage />} />
-        <Route path="/shoppingCart" element={<CartPage />} />
-      </Routes>
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/newItemPage" element={<NewItemPage />} />
+          <Route path="/allItems" element={<ItemsListPage />} />
+          <Route path="/item/:id" element={<ItemDetailsPage />} />
+          <Route path="/shoppingCart" element={<CartPage />} />
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   );
 }
 

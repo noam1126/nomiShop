@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Header from './Header';
+import Header from "./Header";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -19,17 +19,17 @@ const Dashboard = () => {
       });
   }, []);
 
-  const handleProfileClick = () => {
-    navigate("/profile");
-  };
+  // const handleProfileClick = () => {
+  //   navigate("/profile");
+  // };
 
-  const handleNewItem = () => {
-    navigate("/newItemPage");
-  };
+  // const handleNewItem = () => {
+  //   navigate("/newItemPage");
+  // };
 
-  const handleAllItems = () => {
-    navigate("/allItems");
-  };
+  // const handleAllItems = () => {
+  //   navigate("/allItems");
+  // };
 
   const handleSaleClick = () => {
     navigate("/sale");
@@ -65,7 +65,11 @@ const Dashboard = () => {
               const imageUrl = `http://localhost:3001/${item.image}`;
               return (
                 <div key={item._id} className="product-item">
-                  <img src={imageUrl} alt={item.name} className="product-image" />
+                  <img
+                    src={imageUrl}
+                    alt={item.name}
+                    className="product-image"
+                  />
                   <div className="product-info">
                     <p className="product-name">{item.name}</p>
                     <p className="product-price">Price: ${item.price}</p>

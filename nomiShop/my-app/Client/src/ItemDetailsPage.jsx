@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import Header from "./Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faShoppingCart,
@@ -9,7 +10,7 @@ import {
   faHome,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import "./ItemDetailsPage.css"; // Add your CSS styles here
+import "./ItemDetailsPage.css";
 
 function ItemDetailsPage() {
   const { id } = useParams();
@@ -52,34 +53,39 @@ function ItemDetailsPage() {
 
   return (
     <div className="itemDetailsPage">
-      <header className="header">
-        <h1 className="site-title">Nomi shop</h1>
-        <div className="icons">
-          <button className="icon-button" id="home" onClick={handleHomeClick}>
-            <FontAwesomeIcon icon={faHome} />
-          </button>
-          <button
-            className="icon-button"
-            id="shoppingCart"
-            onClick={() => navigate("/shoppingCart")}
-          >
-            <FontAwesomeIcon icon={faShoppingCart} />
-          </button>
-          <button className="icon-button" id="heart">
-            <FontAwesomeIcon icon={faHeart} />
-          </button>
-          <button className="icon-button" id="search">
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-          <button
-            className="icon-button"
-            id="userProfile"
-            onClick={handleProfileClick}
-          >
-            <FontAwesomeIcon icon={faUser} />
-          </button>
-        </div>
-      </header>
+      {/* //   <header className="header">
+    //     <img
+    //       src="/nomi-shop-high-resolution-logo-black-transparent.png"
+    //       alt="Nomi Shop Logo"
+    //       className="site-logo"
+    //     />
+    //     <div className="icons">
+    //       <button className="icon-button" id="home" onClick={handleHomeClick}>
+    //         <FontAwesomeIcon icon={faHome} />
+    //       </button>
+    //       <button
+    //         className="icon-button"
+    //         id="shoppingCart"
+    //         onClick={() => navigate("/shoppingCart")}
+    //       >
+    //         <FontAwesomeIcon icon={faShoppingCart} />
+    //       </button>
+    //       <button className="icon-button" id="heart">
+    //         <FontAwesomeIcon icon={faHeart} />
+    //       </button>
+    //       <button className="icon-button" id="search">
+    //         <FontAwesomeIcon icon={faSearch} />
+    //       </button>
+    //       <button
+    //         className="icon-button"
+    //         id="userProfile"
+    //         onClick={handleProfileClick}
+    //       >
+    //         <FontAwesomeIcon icon={faUser} />
+    //       </button>
+    //     </div>
+    //   </header> */}
+      <Header />
       <div className="container mt-5">
         <div className="row">
           <div className="col-md-6">
