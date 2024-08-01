@@ -38,8 +38,6 @@ mongoose
   .then(() => console.log("connected successfully"))
   .catch((e) => console.error(e));
 
-// Existing routes...
-
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
   UserModel.findOne({ email: email }).then((user) => {
@@ -75,6 +73,7 @@ app.post("/newItemPage", upload.single("image"), (req, res) => {
       description: !!description,
       category: !!category,
       image: !!image,
+      // email:
     });
   }
 
@@ -103,7 +102,7 @@ app.get("/item/:id", (req, res) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-app.get("/shoppingCart/:userId", (req, res) => {
+app.get("/shoppingCart/:_id", (req, res) => {
   const { userId } = req.params;
 
   Cart.find({ userId })

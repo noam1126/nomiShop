@@ -1,12 +1,5 @@
-// models/ShopUser.js
 const mongoose = require("mongoose");
-
 const ShopUserSchema = new mongoose.Schema({
-  userID: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
   name: {
     type: String,
     required: true,
