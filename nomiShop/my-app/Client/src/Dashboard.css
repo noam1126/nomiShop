@@ -4,11 +4,6 @@
   padding: 0;
 }
 
-.site-logo {
-  width: 80px;
-  height: auto;
-}
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -18,9 +13,8 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.site-title {
-  font-size: 1.5rem;
-  color: #333;
+.site-logo {
+  height: 40px;
 }
 
 .icons {
@@ -49,6 +43,7 @@
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 1rem 0;
+  cursor: pointer;
 }
 
 @keyframes slide {
@@ -66,38 +61,22 @@
   animation: slide 10s linear infinite;
 }
 
-.categories-navbar {
-  display: flex;
-  justify-content: center;
-  background-color: #f8f8f8;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.nav-item {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  color: #333;
-  padding: 0.5rem 1rem;
-  margin: 0 0.5rem;
+.explore-banner {
+  text-align: center;
+  margin: 1rem 0;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  transition: background-color 0.3s, border-color 0.3s;
 }
 
-.nav-item:hover {
-  background-color: #f0f0f0;
-  border-color: #ccc;
+.explore-banner-image {
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  display: inline-block;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.nav-item.active {
-  background-color: #007bff;
-  color: #ffffff;
-  border-color: #007bff;
-}
-
-.product-showcase {
+.latest-items {
   padding: 2rem;
 }
 
@@ -105,6 +84,7 @@
   font-size: 1.25rem;
   margin-bottom: 1rem;
   color: #333;
+  text-align: center;
 }
 
 .product-list {
@@ -147,4 +127,9 @@
 .product-price {
   font-size: 0.875rem;
   color: #007bff;
+}
+
+.card-text {
+  font-size: 0.875rem;
+  color: #666;
 }

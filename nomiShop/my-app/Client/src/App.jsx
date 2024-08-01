@@ -9,9 +9,12 @@ import ProfilePage from "./ProfilePage";
 import ItemDetailsPage from "./ItemDetailsPage";
 import ItemsListPage from "./ItemsListPage";
 import NewItemPage from "./NewItemPage";
+import { UserProvider } from './UserContext';
+
 
 function App() {
   return (
+    <UserProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -24,6 +27,7 @@ function App() {
         <Route path="/item/:id" element={<ItemDetailsPage />} />
       </Routes>
     </BrowserRouter>
+    </UserProvider>
   );
 }
 

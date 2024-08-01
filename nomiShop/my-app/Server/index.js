@@ -40,26 +40,43 @@ mongoose
   .then(() => console.log("connected successfully"))
   .catch((e) => console.error(e));
 
-app.post("/login", (req, res) => {
-  const { email, password } = req.body;
-  UserModel.findOne({ email: email }).then((user) => {
-    if (user) {
-      if (user.password === password) {
-        res.json("Success");
+  app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    UserModel.findOne({ email: email }).then((user) => {
+      if (user) {
+        if (user.password === password) {
+          // Include user data in the response
+          res.json({
+            status: "Success",
+            user: {
+              email: user.email,
+              name: user.name,
+              address: user.address,
+            },
+          });
+        } else {
+          res.json("The password is incorrect");
+        }
       } else {
-        res.json("The password is incorrect");
+        res.json("No record existed");
       }
-    } else {
-      res.json("No record existed");
-    }
+    });
   });
-});
 
 app.post("/register", (req, res) => {
   console.log("register started...");
   UserModel.create(req.body)
     .then((users) => res.json(users))
     .catch((err) => res.json(err));
+});
+
+app.delete('/user/:email', (req, res) => {
+  const { email } = req.params;
+  UserModel.findOneAndDelete({ email: email })
+    .then(() => {
+      res.json({ message: 'User deleted' });
+    })
+    .catch(err => res.status(500).json({ error: err.message }));
 });
 
 app.post("/newItemPage", upload.single("image"), (req, res) => {
@@ -101,6 +118,33 @@ app.get("/item/:id", (req, res) => {
   ItemData.findById(id)
     .then((item) => res.json(item))
     .catch((err) => res.status(500).json({ error: err.message }));
+});
+
+// Add the new endpoint to fetch the latest items
+app.get("/latestItems", async (req, res) => {
+  try {
+    const now = new Date();
+    const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
+
+    const latestItems = await ItemData.find({ createdAt: { $gte: oneDayAgo } });
+    res.json(latestItems);
+  } catch (error) {
+    console.error("Error fetching latest items:", error);
+    res.status(500).send("Server Error");
+  }
+});
+
+app.get('/user/:email', (req, res) => {
+  const { email } = req.params;
+  UserModel.findOne({ email: email })
+    .then(user => {
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    })
+    .catch(err => res.status(500).json({ error: err.message }));
 });
 
 app.get("/test", (req, res) => {
