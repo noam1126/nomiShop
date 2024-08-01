@@ -6,19 +6,21 @@ const fs = require("fs");
 const path = require("path");
 const UserModel = require("./model/ShopUser");
 const ItemData = require("./model/ItemData");
-const Cart = require("./model/CartModel");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Ensure the 'uploads' directory exists
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
+// Serve static files from the uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// Configure Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -38,26 +40,43 @@ mongoose
   .then(() => console.log("connected successfully"))
   .catch((e) => console.error(e));
 
-app.post("/login", (req, res) => {
-  const { email, password } = req.body;
-  UserModel.findOne({ email: email }).then((user) => {
-    if (user) {
-      if (user.password === password) {
-        res.json("Success");
+  app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    UserModel.findOne({ email: email }).then((user) => {
+      if (user) {
+        if (user.password === password) {
+          // Include user data in the response
+          res.json({
+            status: "Success",
+            user: {
+              email: user.email,
+              name: user.name,
+              address: user.address,
+            },
+          });
+        } else {
+          res.json("The password is incorrect");
+        }
       } else {
-        res.json("The password is incorrect");
+        res.json("No record existed");
       }
-    } else {
-      res.json("No record existed");
-    }
+    });
   });
-});
 
 app.post("/register", (req, res) => {
   console.log("register started...");
   UserModel.create(req.body)
     .then((users) => res.json(users))
     .catch((err) => res.json(err));
+});
+
+app.delete('/user/:email', (req, res) => {
+  const { email } = req.params;
+  UserModel.findOneAndDelete({ email: email })
+    .then(() => {
+      res.json({ message: 'User deleted' });
+    })
+    .catch(err => res.status(500).json({ error: err.message }));
 });
 
 app.post("/newItemPage", upload.single("image"), (req, res) => {
@@ -73,7 +92,6 @@ app.post("/newItemPage", upload.single("image"), (req, res) => {
       description: !!description,
       category: !!category,
       image: !!image,
-      // email:
     });
   }
 
@@ -102,40 +120,31 @@ app.get("/item/:id", (req, res) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-app.get("/shoppingCart/:_id", (req, res) => {
-  const { userId } = req.params;
+// Add the new endpoint to fetch the latest items
+app.get("/latestItems", async (req, res) => {
+  try {
+    const now = new Date();
+    const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
 
-  Cart.find({ userId })
-    .then((cartItems) => res.json(cartItems))
-    .catch((err) => res.status(500).json({ error: err.message }));
+    const latestItems = await ItemData.find({ createdAt: { $gte: oneDayAgo } });
+    res.json(latestItems);
+  } catch (error) {
+    console.error("Error fetching latest items:", error);
+    res.status(500).send("Server Error");
+  }
 });
 
-// app.post("/shoppingCart", (req, res) => {
-//   const { item } = req.body;
-//   if (!item) {
-//     return res.status(400).json({ error: "Item is required" });
-//   }
-//   CartModel.create(item)
-//     .then((cartItem) => res.json(cartItem))
-//     .catch((err) => res.status(500).json({ error: err.message }));
-// });
-
-app.post("/shoppingCart", (req, res) => {
-  const { userId, item } = req.body; // Expect userId and item details
-
-  const cartItem = new Cart({
-    userId,
-    name: item.name,
-    price: item.price,
-    description: item.description,
-    category: item.category,
-    image: item.image,
-  });
-
-  cartItem
-    .save()
-    .then(() => res.status(200).json("Item added to cart!"))
-    .catch((err) => res.status(500).json({ error: err.message }));
+app.get('/user/:email', (req, res) => {
+  const { email } = req.params;
+  UserModel.findOne({ email: email })
+    .then(user => {
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    })
+    .catch(err => res.status(500).json({ error: err.message }));
 });
 
 app.get("/test", (req, res) => {

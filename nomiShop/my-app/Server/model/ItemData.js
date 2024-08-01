@@ -21,10 +21,7 @@ const ItemDataSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  email: {
-    type: String,
-  },
-});
+}, { timestamps: true }); // Add timestamps here
 
 const ItemData = mongoose.model("ItemData", ItemDataSchema, "ItemsData");
 
