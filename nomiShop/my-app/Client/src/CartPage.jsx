@@ -10,6 +10,7 @@ import {
   faHome,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
+import Header from "./Header";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -43,7 +44,7 @@ function CartPage() {
 
   return (
     <div className="cartPage">
-      <header className="header">
+      {/* <header className="header">
         <img
           src="/nomi-shop-high-resolution-logo-black-transparent.png"
           alt="Nomi Shop Logo"
@@ -70,7 +71,8 @@ function CartPage() {
             <FontAwesomeIcon icon={faUser} />
           </button>
         </div>
-      </header>
+      </header> */}
+      <Header />
       <div className="container mt-5">
         {cartItems.length === 0 ? (
           <p>Your cart is empty.</p>

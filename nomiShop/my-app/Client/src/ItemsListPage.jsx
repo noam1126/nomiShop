@@ -10,6 +10,7 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import Header from "./Header";
 
 function ItemsListPage() {
   const [items, setItems] = useState([]);
@@ -88,7 +89,7 @@ function ItemsListPage() {
 
   return (
     <div className="dashboard">
-      <header className="header">
+      {/* <header className="header">
         <img
           src="/nomi-shop-high-resolution-logo-black-transparent.png"
           alt="Nomi Shop Logo"
@@ -119,8 +120,8 @@ function ItemsListPage() {
             <FontAwesomeIcon icon={faUser} />
           </button>
         </div>
-      </header>
-
+      </header> */}
+      <Header />
       <div className="search-bar">
         <input
           type="text"

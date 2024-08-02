@@ -9,6 +9,7 @@ import {
   faHome,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
+import Header from "./Header";
 
 function NewItemPage() {
   const [name, setName] = useState("");
@@ -75,7 +76,7 @@ function NewItemPage() {
 
   return (
     <div className="newItemPage">
-      <header className="header">
+      {/* <header className="header">
         <img
           src="/nomi-shop-high-resolution-logo-black-transparent.png"
           alt="Nomi Shop Logo"
@@ -102,7 +103,8 @@ function NewItemPage() {
             <FontAwesomeIcon icon={faUser} />
           </button>
         </div>
-      </header>
+      </header> */}
+      <Header />
       <div className="container mt-5">
         <h2>Add New Item</h2>
         <form onSubmit={handleSubmit}>
