@@ -34,6 +34,21 @@ function CartPage() {
     }
   }, [userId]);
 
+  const handleRemoveItem = (itemId) => {
+    axios
+      .delete(`http://localhost:3001/shoppingCart/${userId}/${itemId}`)
+      .then((response) => {
+        // Update the cart items after removing the item
+        setCartItems(cartItems.filter((item) => item._id !== itemId));
+      })
+      .catch((error) =>
+        console.error(
+          "There was an error removing the item from the cart!",
+          error
+        )
+      );
+  };
+
   return (
     <div className="cartPage">
       <Header />
@@ -54,7 +69,12 @@ function CartPage() {
                     <h3>{item.name}</h3>
                     <p>Price: ${item.price}</p>
                     <p>Quantity: {item.quantity}</p>
-                    <button className="btn btn-danger">Remove</button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleRemoveItem(item._id)}
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               </div>
