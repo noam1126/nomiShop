@@ -19,17 +19,9 @@ const Dashboard = () => {
       });
   }, []);
 
-  // const handleProfileClick = () => {
-  //   navigate("/profile");
-  // };
-
-  // const handleNewItem = () => {
-  //   navigate("/newItemPage");
-  // };
-
-  // const handleAllItems = () => {
-  //   navigate("/allItems");
-  // };
+  const handleItemClick = (id) => {
+    navigate(`/item/${id}`);
+  };
 
   const handleSaleClick = () => {
     navigate("/sale");
@@ -64,7 +56,11 @@ const Dashboard = () => {
             latestItems.map((item) => {
               const imageUrl = `http://localhost:3001/${item.image}`;
               return (
-                <div key={item._id} className="product-item">
+                <div
+                  key={item._id}
+                  className="product-item"
+                  onClick={() => handleItemClick(item._id)}
+                >
                   <img
                     src={imageUrl}
                     alt={item.name}

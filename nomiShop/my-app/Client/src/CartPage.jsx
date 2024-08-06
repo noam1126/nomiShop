@@ -1,77 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./CartPage.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faShoppingCart,
-  faHeart,
-  faUser,
-  faHome,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+import { UserContext } from "./UserContext";
 import Header from "./Header";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
-  const userId = "your-user-id"; // Replace with the actual userId from your auth system
+  const { user } = useContext(UserContext);
+
+  // Add console logs for debugging
+  console.log("User context:", user);
+
+  if (!user) {
+    // Navigate to login if user is not defined
+    useEffect(() => {
+      navigate("/login");
+    }, [navigate]);
+    return null;
+  }
+
+  const userId = user._id;
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/shoppingCart/${userId}`)
-      .then((response) => setCartItems(response.data))
-      .catch((error) =>
-        console.error("There was an error fetching the cart items!", error)
-      );
+    if (userId) {
+      axios
+        .get(`http://localhost:3001/shoppingCart/${userId}`)
+        .then((response) => setCartItems(response.data))
+        .catch((error) =>
+          console.error("There was an error fetching the cart items!", error)
+        );
+    }
   }, [userId]);
-
-  const handleHomeClick = () => {
-    navigate("/dashboard");
-  };
-
-  const handleAllItems = () => {
-    navigate("/allItems");
-  };
-
-  const handleProfileClick = () => {
-    navigate("/profile");
-  };
-
-  const handleNewItem = () => {
-    navigate("/newItem");
-  };
 
   return (
     <div className="cartPage">
-      {/* <header className="header">
-        <img
-          src="/nomi-shop-high-resolution-logo-black-transparent.png"
-          alt="Nomi Shop Logo"
-          className="site-logo"
-        />
-        <div className="icons">
-          <button className="icon-button" id="home" onClick={handleHomeClick}>
-            <FontAwesomeIcon icon={faHome} />
-          </button>
-          <button className="icon-button" id="shoppingCart">
-            <FontAwesomeIcon icon={faShoppingCart} />
-          </button>
-          <button className="icon-button" id="heart" onClick={handleNewItem}>
-            <FontAwesomeIcon icon={faHeart} />
-          </button>
-          <button className="icon-button" id="search" onClick={handleAllItems}>
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-          <button
-            className="icon-button"
-            id="userProfile"
-            onClick={handleProfileClick}
-          >
-            <FontAwesomeIcon icon={faUser} />
-          </button>
-        </div>
-      </header> */}
       <Header />
       <div className="container mt-5">
         {cartItems.length === 0 ? (

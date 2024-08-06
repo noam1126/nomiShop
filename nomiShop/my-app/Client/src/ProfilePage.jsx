@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import axios from "axios";
 import Header from "./Header";
@@ -6,24 +7,42 @@ import "./ProfilePage.css";
 
 const ProfilePage = () => {
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
     address: "",
-    buyerOrSeller: "", // This field indicates if the user is a buyer or seller
-    itemsForSale: [], // List of items for sale if user is a seller
+    buyerOrSeller: "",
   });
+  const [itemsForSale, setItemsForSale] = useState([]);
 
   useEffect(() => {
     if (user && user.email) {
+      console.log("User:", user);
       axios
         .get(`http://localhost:3001/user/${user.email}`)
         .then((response) => {
           setUserDetails(response.data);
+          console.log("User details:", response.data);
         })
         .catch((error) => {
           console.error("There was an error fetching the user details!", error);
         });
+
+      if (user.buyerOrSeller === "seller") {
+        axios
+          .get(`http://localhost:3001/itemsForSale/${user._id}`)
+          .then((response) => {
+            setItemsForSale(response.data);
+            console.log("Items for sale:", response.data);
+          })
+          .catch((error) => {
+            console.error(
+              "There was an error fetching the items for sale!",
+              error
+            );
+          });
+      }
     }
   }, [user]);
 
@@ -33,7 +52,7 @@ const ProfilePage = () => {
         .delete(`http://localhost:3001/user/${user.email}`)
         .then(() => {
           alert("Account deleted");
-          window.location.href = "/register";
+          navigate("/register");
         })
         .catch((error) => {
           console.error("There was an error deleting the account!", error);
@@ -42,7 +61,7 @@ const ProfilePage = () => {
   };
 
   const handleAddNewItem = () => {
-    window.location.href = "/newItemPage"; // Redirect to add new item page
+    navigate("/newItemPage");
   };
 
   return (
@@ -86,14 +105,17 @@ const ProfilePage = () => {
           <section className="items-for-sale">
             <h2>My Items for Sale</h2>
             <ul>
-              {userDetails.itemsForSale &&
-                userDetails.itemsForSale.map((item) => (
+              {itemsForSale.length > 0 ? (
+                itemsForSale.map((item) => (
                   <li key={item._id}>
                     <p>Product: {item.name}</p>
                     <p>Price: ${item.price}</p>
                     <p>Description: {item.description}</p>
                   </li>
-                ))}
+                ))
+              ) : (
+                <p>No items for sale.</p>
+              )}
             </ul>
           </section>
         </section>

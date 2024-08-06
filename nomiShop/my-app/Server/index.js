@@ -6,6 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const UserModel = require("./model/ShopUser");
 const ItemData = require("./model/ItemData");
+const Cart = require("./model/CartModel");
 
 const app = express();
 app.use(express.json());
@@ -40,53 +41,65 @@ mongoose
   .then(() => console.log("connected successfully"))
   .catch((e) => console.error(e));
 
-  app.post("/login", (req, res) => {
-    const { email, password } = req.body;
-    UserModel.findOne({ email: email }).then((user) => {
-      if (user) {
-        if (user.password === password) {
-          // Include user data in the response
-          res.json({
-            status: "Success",
-            user: {
-              email: user.email,
-              name: user.name,
-              address: user.address,
-            },
-          });
-        } else {
-          res.json("The password is incorrect");
-        }
+console.log("Cart model:", Cart);
+
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  UserModel.findOne({ email: email }).then((user) => {
+    if (user) {
+      if (user.password === password) {
+        // Include user _id in the response
+        res.json({
+          status: "Success",
+          user: {
+            _id: user._id,
+            email: user.email,
+            name: user.name,
+            address: user.address,
+          },
+        });
       } else {
-        res.json("No record existed");
+        res.json("The password is incorrect");
       }
-    });
+    } else {
+      res.json("No record existed");
+    }
   });
+});
 
 app.post("/register", (req, res) => {
   console.log("register started...");
   UserModel.create(req.body)
-    .then((users) => res.json(users))
+    .then((user) => {
+      // Include user _id in the response
+      res.json({
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        address: user.address,
+      });
+    })
     .catch((err) => res.json(err));
 });
 
-app.delete('/user/:email', (req, res) => {
+app.delete("/user/:email", (req, res) => {
   const { email } = req.params;
   UserModel.findOneAndDelete({ email: email })
     .then(() => {
-      res.json({ message: 'User deleted' });
+      res.json({ message: "User deleted" });
     })
-    .catch(err => res.status(500).json({ error: err.message }));
+    .catch((err) => res.status(500).json({ error: err.message }));
 });
 
 app.post("/newItemPage", upload.single("image"), (req, res) => {
   console.log("add item started...");
-  const { name, price, description, category } = req.body;
+  const { userId, name, price, description, category } = req.body;
   const image = req.file ? req.file.path : null;
 
-  if (!name || !price || !description || !category || !image) {
+  if (!userId || !name || !price || !description || !category || !image) {
     return res.status(400).json({
       error: "All fields are required",
+      userId: !!userId,
       name: !!name,
       price: !!price,
       description: !!description,
@@ -95,7 +108,7 @@ app.post("/newItemPage", upload.single("image"), (req, res) => {
     });
   }
 
-  ItemData.create({ name, price, description, category, image })
+  ItemData.create({ userId, name, price, description, category, image })
     .then((items) => res.json(items))
     .catch((err) => res.json(err));
 });
@@ -134,17 +147,87 @@ app.get("/latestItems", async (req, res) => {
   }
 });
 
-app.get('/user/:email', (req, res) => {
+app.get("/user/:email", (req, res) => {
   const { email } = req.params;
   UserModel.findOne({ email: email })
-    .then(user => {
+    .then((user) => {
       if (user) {
         res.json(user);
       } else {
-        res.status(404).json({ error: 'User not found' });
+        res.status(404).json({ error: "User not found" });
       }
     })
-    .catch(err => res.status(500).json({ error: err.message }));
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+
+app.get("/shoppingCart/:userId", (req, res) => {
+  const { userId } = req.params;
+
+  Cart.findOne({ userId })
+    .then((cart) => {
+      if (cart) {
+        res.json(cart.items);
+      } else {
+        res.json([]);
+      }
+    })
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+
+// app.post("/shoppingCart", (req, res) => {
+//   const { userId, item } = req.body;
+
+//   Cart.findOne({ userId })
+//     .then((cart) => {
+//       if (cart) {
+//         cart.items.push(item);
+//         return cart.save();
+//       } else {
+//         return Cart.create({ userId, items: [item] });
+//       }
+//     })
+//     .then((cart) => res.status(200).json("Item added to cart!"))
+//     .catch((err) => res.status(500).json({ error: err.message }));
+// });
+
+app.post("/shoppingCart", (req, res) => {
+  const { userId, item } = req.body;
+
+  Cart.findOne({ userId })
+    .then((cart) => {
+      if (cart) {
+        cart.items.push(item);
+        return cart.save();
+      } else {
+        return Cart.create({ userId, items: [item] });
+      }
+    })
+    .then((cart) => res.status(200).json("Item added to cart!"))
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+
+app.delete("/shoppingCart/:userId/:itemId", (req, res) => {
+  const { userId, itemId } = req.params;
+
+  Cart.findOne({ userId })
+    .then((cart) => {
+      if (!cart) {
+        return res.status(404).json({ error: "Cart not found" });
+      }
+
+      cart.items = cart.items.filter((item) => item._id.toString() !== itemId);
+      return cart.save();
+    })
+    .then(() => res.status(200).json("Item removed from cart!"))
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+
+app.get("/itemsForSale/:userId", (req, res) => {
+  const { userId } = req.params;
+
+  ItemData.find({ userId })
+    .then((items) => res.json(items))
+    .catch((err) => res.status(500).json({ error: err.message }));
 });
 
 app.get("/test", (req, res) => {
