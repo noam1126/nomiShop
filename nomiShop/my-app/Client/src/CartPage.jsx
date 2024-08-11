@@ -4,17 +4,15 @@ import { useNavigate } from "react-router-dom";
 import "./CartPage.css";
 import { UserContext } from "./UserContext";
 import Header from "./Header";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
-  // Add console logs for debugging
-  console.log("User context:", user);
-
   if (!user) {
-    // Navigate to login if user is not defined
     useEffect(() => {
       navigate("/login");
     }, [navigate]);
@@ -37,8 +35,7 @@ function CartPage() {
   const handleRemoveItem = (itemId) => {
     axios
       .delete(`http://localhost:3001/shoppingCart/${userId}/${itemId}`)
-      .then((response) => {
-        // Update the cart items after removing the item
+      .then(() => {
         setCartItems(cartItems.filter((item) => item._id !== itemId));
       })
       .catch((error) =>
@@ -46,6 +43,25 @@ function CartPage() {
           "There was an error removing the item from the cart!",
           error
         )
+      );
+  };
+
+  const handleQuantityChange = (itemId, newQuantity) => {
+    if (newQuantity < 1) return; // Ensure quantity doesn't go below 1
+
+    axios
+      .put(`http://localhost:3001/shoppingCart/${userId}/${itemId}`, {
+        quantity: newQuantity,
+      })
+      .then(() => {
+        setCartItems(
+          cartItems.map((item) =>
+            item._id === itemId ? { ...item, quantity: newQuantity } : item
+          )
+        );
+      })
+      .catch((error) =>
+        console.error("There was an error updating the item quantity!", error)
       );
   };
 
@@ -68,13 +84,29 @@ function CartPage() {
                   <div className="item-info">
                     <h3>{item.name}</h3>
                     <p>Price: ${item.price}</p>
-                    <p>Quantity: {item.quantity}</p>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleRemoveItem(item._id)}
-                    >
-                      Remove
-                    </button>
+                    <div className="quantity-controls">
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(item._id, item.quantity - 1)
+                        }
+                      >
+                        -
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(item._id, item.quantity + 1)
+                        }
+                      >
+                        +
+                      </button>
+                      <button
+                        className="remove-button"
+                        onClick={() => handleRemoveItem(item._id)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

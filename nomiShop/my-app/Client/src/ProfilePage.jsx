@@ -16,31 +16,56 @@ const ProfilePage = () => {
   });
   const [itemsForSale, setItemsForSale] = useState([]);
 
+  // useEffect(() => {
+  //   if (user && user.email) {
+  //     axios
+  //       .get(`http://localhost:3001/user/${user.email}`)
+  //       .then((response) => {
+  //         setUserDetails(response.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error("There was an error fetching the user details!", error);
+  //       });
+
+  //     if (user.buyerOrSeller === "seller") {
+  //       axios
+  //         .get(`http://localhost:3001/itemsForSale/${user._id}`)
+  //         .then((response) => {
+  //           setItemsForSale(response.data);
+  //         })
+  //         .catch((error) => {
+  //           console.error(
+  //             "There was an error fetching the items for sale!",
+  //             error
+  //           );
+  //         });
+  //     }
+  //   }
+  // }, [user]);
+
   useEffect(() => {
+    console.log("useEffect triggered with user:", user);
     if (user && user.email) {
-      console.log("User:", user);
       axios
         .get(`http://localhost:3001/user/${user.email}`)
         .then((response) => {
           setUserDetails(response.data);
-          console.log("User details:", response.data);
+          console.log("User details fetched:", response.data);
         })
         .catch((error) => {
-          console.error("There was an error fetching the user details!", error);
+          console.error("Error fetching user details:", error);
         });
 
       if (user.buyerOrSeller === "seller") {
+        console.log("Fetching items for sale for user:", user._id);
         axios
           .get(`http://localhost:3001/itemsForSale/${user._id}`)
           .then((response) => {
             setItemsForSale(response.data);
-            console.log("Items for sale:", response.data);
+            console.log("Items for sale fetched:", response.data);
           })
           .catch((error) => {
-            console.error(
-              "There was an error fetching the items for sale!",
-              error
-            );
+            console.error("Error fetching items for sale:", error);
           });
       }
     }
@@ -104,6 +129,7 @@ const ProfilePage = () => {
 
           <section className="items-for-sale">
             <h2>My Items for Sale</h2>
+            <h2>{itemsForSale.length}</h2>
             <ul>
               {itemsForSale.length > 0 ? (
                 itemsForSale.map((item) => (

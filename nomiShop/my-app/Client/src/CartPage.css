@@ -35,3 +35,46 @@
   border: none;
   cursor: pointer;
 }
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-controls button {
+  width: 20px;
+  height: 20px;
+  font-size: 16px;
+  padding: 5px;
+  margin: 0 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quantity-controls button:active {
+  background-color: #e0e0e0;
+}
+
+.remove-button {
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  padding: 0;
+  margin-left: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-button:active {
+  background-color: #e0e0e0;
+}

@@ -174,35 +174,54 @@ app.get("/shoppingCart/:userId", (req, res) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-// app.post("/shoppingCart", (req, res) => {
-//   const { userId, item } = req.body;
-
-//   Cart.findOne({ userId })
-//     .then((cart) => {
-//       if (cart) {
-//         cart.items.push(item);
-//         return cart.save();
-//       } else {
-//         return Cart.create({ userId, items: [item] });
-//       }
-//     })
-//     .then((cart) => res.status(200).json("Item added to cart!"))
-//     .catch((err) => res.status(500).json({ error: err.message }));
-// });
-
 app.post("/shoppingCart", (req, res) => {
   const { userId, item } = req.body;
 
   Cart.findOne({ userId })
     .then((cart) => {
       if (cart) {
-        cart.items.push(item);
+        // Find the item in the cart
+        const existingItem = cart.items.find(
+          (cartItem) => cartItem.name === item.name
+        );
+
+        if (existingItem) {
+          // If the item exists, increment its quantity
+          existingItem.quantity += 1;
+        } else {
+          // If the item does not exist, add it to the cart
+          cart.items.push(item);
+        }
+
         return cart.save();
       } else {
+        // If the cart does not exist, create a new one
         return Cart.create({ userId, items: [item] });
       }
     })
-    .then((cart) => res.status(200).json("Item added to cart!"))
+    .then(() => res.status(200).json("Item added to cart!"))
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+
+app.put("/shoppingCart/:userId/:itemId", (req, res) => {
+  const { userId, itemId } = req.params;
+  const { quantity } = req.body;
+
+  Cart.findOne({ userId })
+    .then((cart) => {
+      if (!cart) {
+        return res.status(404).json({ error: "Cart not found" });
+      }
+
+      const item = cart.items.id(itemId);
+      if (!item) {
+        return res.status(404).json({ error: "Item not found in cart" });
+      }
+
+      item.quantity = quantity;
+      return cart.save();
+    })
+    .then(() => res.status(200).json("Item quantity updated!"))
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
@@ -222,12 +241,36 @@ app.delete("/shoppingCart/:userId/:itemId", (req, res) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-app.get("/itemsForSale/:userId", (req, res) => {
-  const { userId } = req.params;
+// app.get("/itemsForSale/:userId", (req, res) => {
+//   const { userId } = req.params;
 
-  ItemData.find({ userId })
-    .then((items) => res.json(items))
-    .catch((err) => res.status(500).json({ error: err.message }));
+//   ItemData.find({ userId })
+//     .then((items) => res.json(items))
+//     .catch((err) => res.status(500).json({ error: err.message }));
+// });
+
+app.get("/itemsForSale/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const ObjectId = mongoose.Types.ObjectId;
+
+  try {
+    const objectId = new ObjectId(userId);
+
+    console.log("Fetching items for userId:", objectId);
+
+    const items = await ItemData.find({ userId: objectId });
+
+    console.log("Items found:", items);
+
+    if (items.length === 0) {
+      console.log("No items found for this user.");
+    }
+
+    res.json(items);
+  } catch (error) {
+    console.error("Error fetching items for sale:", error);
+    res.status(400).json({ error: "Invalid userId format or no items found." });
+  }
 });
 
 app.get("/test", (req, res) => {
