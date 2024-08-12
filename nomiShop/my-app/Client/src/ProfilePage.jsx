@@ -11,7 +11,6 @@ const ProfilePage = () => {
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
-    address: "",
     buyerOrSeller: "",
   });
   const [itemsForSale, setItemsForSale] = useState([]);
@@ -115,9 +114,6 @@ const ProfilePage = () => {
         </p>
         <p>
           <strong>Email:</strong> {userDetails.email}
-        </p>
-        <p>
-          <strong>Address:</strong> {userDetails.address}
         </p>
       </section>
 

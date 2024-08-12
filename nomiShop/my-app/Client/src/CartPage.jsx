@@ -47,7 +47,7 @@ function CartPage() {
   };
 
   const handleQuantityChange = (itemId, newQuantity) => {
-    if (newQuantity < 1) return; // Ensure quantity doesn't go below 1
+    if (newQuantity < 1) return;
 
     axios
       .put(`http://localhost:3001/shoppingCart/${userId}/${itemId}`, {
