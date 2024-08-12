@@ -9,6 +9,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
+  const [orderPlaced, setOrderPlaced] = useState(false);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
@@ -65,6 +66,32 @@ function CartPage() {
       );
   };
 
+  const handleOrderCart = () => {
+    if (cartItems.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
+    const orderData = {
+      userId: userId,
+      items: cartItems,
+      date: new Date().toISOString(),
+      status: "Pending", // Status field to track the order state
+    };
+
+    axios
+      .post("http://localhost:3001/orders", orderData)
+      .then((response) => {
+        setOrderPlaced(true);
+        alert("Order placed successfully!");
+        setCartItems([]); // Clear the cart after placing the order
+      })
+      .catch((error) => {
+        console.error("Error placing the order:", error);
+        alert("There was an issue placing your order. Please try again.");
+      });
+  };
+
   return (
     <div className="cartPage">
       <Header />
@@ -72,48 +99,54 @@ function CartPage() {
         {cartItems.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
-          <div className="row">
-            {cartItems.map((item) => (
-              <div key={item._id} className="col-md-4">
-                <div className="cart-item">
-                  <img
-                    src={`http://localhost:3001/${item.image}`}
-                    alt={item.name}
-                    className="img-fluid"
-                  />
-                  <div className="item-info">
-                    <h3>{item.name}</h3>
-                    <p>Price: ${item.price}</p>
-                    <div className="quantity-controls">
-                      <button
-                        onClick={() =>
-                          handleQuantityChange(item._id, item.quantity - 1)
-                        }
-                      >
-                        -
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button
-                        onClick={() =>
-                          handleQuantityChange(item._id, item.quantity + 1)
-                        }
-                      >
-                        +
-                      </button>
-                      <button
-                        className="remove-button"
-                        onClick={() => handleRemoveItem(item._id)}
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
+          <>
+            <div className="row">
+              {cartItems.map((item) => (
+                <div key={item._id} className="col-md-4">
+                  <div className="cart-item">
+                    <img
+                      src={`http://localhost:3001/${item.image}`}
+                      alt={item.name}
+                      className="img-fluid"
+                    />
+                    <div className="item-info">
+                      <h3>{item.name}</h3>
+                      <p>Price: ${item.price}</p>
+                      <div className="quantity-controls">
+                        <button
+                          onClick={() =>
+                            handleQuantityChange(item._id, item.quantity - 1)
+                          }
+                        >
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          onClick={() =>
+                            handleQuantityChange(item._id, item.quantity + 1)
+                          }
+                        >
+                          +
+                        </button>
+                        <button
+                          className="remove-button"
+                          onClick={() => handleRemoveItem(item._id)}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
+      <button className="btn order-button" onClick={handleOrderCart}>
+        Place Order
+      </button>
+      {orderPlaced && <p>Your order has been placed!</p>}
     </div>
   );
 }
