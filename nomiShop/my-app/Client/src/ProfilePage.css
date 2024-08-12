@@ -84,3 +84,83 @@
 .confirm-dialog button:last-child:hover {
   background-color: #ff1c1c;
 }
+.seller-section .items-for-sale {
+  padding: 10px;
+}
+
+.seller-section .product-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.seller-section .product-image {
+  width: 60px;
+  height: 60px;
+  margin-right: 15px;
+}
+
+.seller-section .product-info {
+  font-size: 14px;
+}
+
+.seller-section .product-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.seller-section .product-price {
+  font-size: 14px;
+  color: #555;
+  margin: 5px 0;
+}
+
+.seller-section .card-text {
+  font-size: 12px;
+  color: #777;
+}
+
+.seller-section .btn {
+  font-size: 12px;
+  padding: 5px 10px;
+  margin-top: 5px;
+}
+.seller-section .item-actions {
+  display: flex;
+  gap: 10px; /* Space between the buttons */
+  margin-top: 10px; /* Adjust space between buttons and other elements */
+}
+
+.seller-section .delete-button,
+.seller-section .edit-button {
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  padding: 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.seller-section .delete-button:hover,
+.seller-section .edit-button:hover {
+  background-color: #e0e0e0; /* Change background color on hover */
+  border-color: #999; /* Change border color on hover */
+}
+
+.seller-section .delete-button {
+  color: #dc3545; /* Red color for the delete button */
+}
+
+.seller-section .edit-button {
+  color: #007bff; /* Blue color for the edit button */
+}

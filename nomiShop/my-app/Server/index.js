@@ -225,6 +225,52 @@ app.put("/shoppingCart/:userId/:itemId", (req, res) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
+app.put("/item/:id", upload.single("image"), (req, res) => {
+  const { id } = req.params;
+  const { name, price, description, category } = req.body;
+  const image = req.file ? req.file.path : null;
+
+  ItemData.findById(id)
+    .then((item) => {
+      if (!item) {
+        return res.status(404).json({ error: "Item not found" });
+      }
+
+      // Update item details
+      item.name = name || item.name;
+      item.price = price || item.price;
+      item.description = description || item.description;
+      item.category = category || item.category;
+
+      if (image) {
+        // If a new image is uploaded, replace the old one
+        fs.unlinkSync(item.image); // Remove the old image file
+        item.image = image;
+      }
+
+      return item.save();
+    })
+    .then((updatedItem) => res.json(updatedItem))
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+
+app.delete("/item/:id", (req, res) => {
+  const { id } = req.params;
+
+  ItemData.findByIdAndDelete(id)
+    .then((item) => {
+      if (!item) {
+        return res.status(404).json({ error: "Item not found" });
+      }
+
+      // Delete the image file associated with the item
+      fs.unlinkSync(item.image);
+
+      res.json({ message: "Item deleted" });
+    })
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+
 app.delete("/shoppingCart/:userId/:itemId", (req, res) => {
   const { userId, itemId } = req.params;
 
@@ -240,14 +286,6 @@ app.delete("/shoppingCart/:userId/:itemId", (req, res) => {
     .then(() => res.status(200).json("Item removed from cart!"))
     .catch((err) => res.status(500).json({ error: err.message }));
 });
-
-// app.get("/itemsForSale/:userId", (req, res) => {
-//   const { userId } = req.params;
-
-//   ItemData.find({ userId })
-//     .then((items) => res.json(items))
-//     .catch((err) => res.status(500).json({ error: err.message }));
-// });
 
 app.get("/itemsForSale/:userId", async (req, res) => {
   const { userId } = req.params;

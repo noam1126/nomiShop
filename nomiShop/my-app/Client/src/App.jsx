@@ -11,6 +11,7 @@ import ItemsListPage from "./ItemsListPage";
 import NewItemPage from "./NewItemPage";
 import CartPage from "./CartPage";
 import { UserProvider } from "./UserContext";
+import EditItemPage from "./EditItemPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/allItems" element={<ItemsListPage />} />
           <Route path="/item/:id" element={<ItemDetailsPage />} />
           <Route path="/shoppingCart" element={<CartPage />} />
+          <Route path="/editItem/:itemId" element={<EditItemPage />} />
         </Routes>
       </BrowserRouter>
     </UserProvider>

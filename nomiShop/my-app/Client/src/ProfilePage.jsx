@@ -4,6 +4,8 @@ import { UserContext } from "./UserContext";
 import axios from "axios";
 import Header from "./Header";
 import "./ProfilePage.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 const ProfilePage = () => {
   const { user } = useContext(UserContext);
@@ -15,58 +17,27 @@ const ProfilePage = () => {
   });
   const [itemsForSale, setItemsForSale] = useState([]);
 
-  // useEffect(() => {
-  //   if (user && user.email) {
-  //     axios
-  //       .get(`http://localhost:3001/user/${user.email}`)
-  //       .then((response) => {
-  //         setUserDetails(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("There was an error fetching the user details!", error);
-  //       });
-
-  //     if (user.buyerOrSeller === "seller") {
-  //       axios
-  //         .get(`http://localhost:3001/itemsForSale/${user._id}`)
-  //         .then((response) => {
-  //           setItemsForSale(response.data);
-  //         })
-  //         .catch((error) => {
-  //           console.error(
-  //             "There was an error fetching the items for sale!",
-  //             error
-  //           );
-  //         });
-  //     }
-  //   }
-  // }, [user]);
-
   useEffect(() => {
-    console.log("useEffect triggered with user:", user);
     if (user && user.email) {
       axios
         .get(`http://localhost:3001/user/${user.email}`)
         .then((response) => {
           setUserDetails(response.data);
-          console.log("User details fetched:", response.data);
+
+          if (response.data.buyerOrSeller === "seller") {
+            axios
+              .get(`http://localhost:3001/itemsForSale/${response.data._id}`)
+              .then((itemsResponse) => {
+                setItemsForSale(itemsResponse.data);
+              })
+              .catch((error) => {
+                console.error("Error fetching items for sale:", error);
+              });
+          }
         })
         .catch((error) => {
           console.error("Error fetching user details:", error);
         });
-
-      if (user.buyerOrSeller === "seller") {
-        console.log("Fetching items for sale for user:", user._id);
-        axios
-          .get(`http://localhost:3001/itemsForSale/${user._id}`)
-          .then((response) => {
-            setItemsForSale(response.data);
-            console.log("Items for sale fetched:", response.data);
-          })
-          .catch((error) => {
-            console.error("Error fetching items for sale:", error);
-          });
-      }
     }
   }, [user]);
 
@@ -86,6 +57,28 @@ const ProfilePage = () => {
 
   const handleAddNewItem = () => {
     navigate("/newItemPage");
+  };
+
+  const handleItemClick = (id) => {
+    navigate(`/item/${id}`);
+  };
+
+  const handleEditItem = (itemId) => {
+    navigate(`/editItem/${itemId}`);
+  };
+
+  const handleDeleteItem = (itemId) => {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      axios
+        .delete(`http://localhost:3001/item/${itemId}`)
+        .then(() => {
+          setItemsForSale(itemsForSale.filter((item) => item._id !== itemId));
+          alert("Item deleted");
+        })
+        .catch((error) => {
+          console.error("There was an error deleting the item!", error);
+        });
+    }
   };
 
   return (
@@ -123,22 +116,55 @@ const ProfilePage = () => {
             Add New Item for Sale
           </button>
 
-          <section className="items-for-sale">
+          <section className="product-showcase">
             <h2>My Items for Sale</h2>
-            <h2>{itemsForSale.length}</h2>
-            <ul>
+            <div className="product-list">
               {itemsForSale.length > 0 ? (
-                itemsForSale.map((item) => (
-                  <li key={item._id}>
-                    <p>Product: {item.name}</p>
-                    <p>Price: ${item.price}</p>
-                    <p>Description: {item.description}</p>
-                  </li>
-                ))
+                itemsForSale.map((item) => {
+                  const imageUrl = `http://localhost:3001/${item.image}`;
+                  return (
+                    <div
+                      key={item._id}
+                      className="product-item"
+                      onClick={() => handleItemClick(item._id)}
+                    >
+                      <img
+                        src={imageUrl}
+                        alt={item.name}
+                        className="product-image"
+                      />
+                      <div className="product-info">
+                        <p className="product-name">{item.name}</p>
+                        <p className="product-price">Price: ${item.price}</p>
+                        <p className="card-text">{item.description}</p>
+                        <div className="item-actions">
+                          <button
+                            className="edit-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditItem(item._id);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button
+                            className="delete-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteItem(item._id);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
               ) : (
                 <p>No items for sale.</p>
               )}
-            </ul>
+            </div>
           </section>
         </section>
       )}
