@@ -266,8 +266,15 @@ app.delete("/item/:id", (req, res) => {
       // Delete the image file associated with the item
       fs.unlinkSync(item.image);
 
-      res.json({ message: "Item deleted" });
+      // After deleting the item, remove it from all shopping carts
+      return Cart.updateMany(
+        { "items._id": id }, // Find carts with the item
+        { $pull: { items: { _id: id } } } // Remove the item from the cart
+      );
     })
+    .then(() =>
+      res.json({ message: "Item and associated cart entries deleted" })
+    )
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
