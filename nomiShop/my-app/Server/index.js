@@ -7,6 +7,7 @@ const path = require("path");
 const UserModel = require("./model/ShopUser");
 const ItemData = require("./model/ItemData");
 const Cart = require("./model/CartModel");
+const Order = require("./model/Order");
 
 const app = express();
 app.use(express.json());
@@ -277,51 +278,24 @@ app.delete("/item/:id", (req, res) => {
     )
     .catch((err) => res.status(500).json({ error: err.message }));
 });
+app.get("/itemsForSale/:userId", (req, res) => {
+  const { userId } = req.params;
 
-app.delete("/shoppingCart/:userId/:itemId", (req, res) => {
-  const { userId, itemId } = req.params;
-
-  Cart.findOne({ userId })
-    .then((cart) => {
-      if (!cart) {
-        return res.status(404).json({ error: "Cart not found" });
+  ItemData.find({ userId: userId })
+    .then((items) => {
+      if (items.length === 0) {
+        return res.status(404).json({ error: "No items found for this user" });
       }
-
-      cart.items = cart.items.filter((item) => item._id.toString() !== itemId);
-      return cart.save();
+      res.json(items);
     })
-    .then(() => res.status(200).json("Item removed from cart!"))
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-app.get("/itemsForSale/:userId", async (req, res) => {
-  const { userId } = req.params;
-  const ObjectId = mongoose.Types.ObjectId;
+// Import and use the order routes
+const orderRoutes = require("./routes/orderRoutes");
+app.use(orderRoutes);
 
-  try {
-    const objectId = new ObjectId(userId);
-
-    console.log("Fetching items for userId:", objectId);
-
-    const items = await ItemData.find({ userId: objectId });
-
-    console.log("Items found:", items);
-
-    if (items.length === 0) {
-      console.log("No items found for this user.");
-    }
-
-    res.json(items);
-  } catch (error) {
-    console.error("Error fetching items for sale:", error);
-    res.status(400).json({ error: "Invalid userId format or no items found." });
-  }
-});
-
-app.get("/test", (req, res) => {
-  console.log("test!!!!!");
-  return res.json("ok!");
-});
+// Order route handled by `orderRoutes.js` file
 
 app.listen(3001, () => {
   console.log("server is running on port 3001");
