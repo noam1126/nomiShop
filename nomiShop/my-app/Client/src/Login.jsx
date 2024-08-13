@@ -1,25 +1,24 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import Dashboard from "./Dashboard";
+import { UserContext } from "./UserContext";
 
 function Login() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post("http://localhost:3001/login", { email, password })
       .then((result) => {
-        console.log(result);
-        if (result.data === "Success") {
+        if (result.data.status === "Success") {
+          setUser(result.data.user);
           navigate("/dashboard");
         } else {
-          navigate("/register");
-          alert("You are not registered to this service");
+          alert("Invalid credentials");
         }
       })
       .catch((err) => console.log(err));
@@ -46,7 +45,7 @@ function Login() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="email">
+            <label htmlFor="password">
               <strong>Password</strong>
             </label>
             <input

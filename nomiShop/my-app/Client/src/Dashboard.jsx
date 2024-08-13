@@ -1,14 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faShoppingCart,
-  faHeart,
-  faUser,
-  faHome,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import Header from "./Header";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -26,21 +19,8 @@ const Dashboard = () => {
       });
   }, []);
 
-  const handleProfileClick = () => {
-    const userType = localStorage.getItem("userType");
-    if (userType === "buyer") {
-      navigate("/buyerProfile");
-    } else if (userType === "seller") {
-      navigate("/sellerProfile");
-    }
-  };
-
-  const handleNewItem = () => {
-    navigate("/newItemPage");
-  };
-
-  const handleAllItems = () => {
-    navigate("/allItems");
+  const handleItemClick = (id) => {
+    navigate(`/item/${id}`);
   };
 
   const handleSaleClick = () => {
@@ -48,34 +28,12 @@ const Dashboard = () => {
   };
 
   const handleExploreItemsClick = () => {
-    navigate("/itemslistpage");
+    navigate("/allItems");
   };
 
   return (
     <div className="dashboard">
-      <header className="header">
-        <div className="icons">
-          <button className="icon-button" id="home">
-            <FontAwesomeIcon icon={faHome} />
-          </button>
-          <button className="icon-button" id="shoppingCart">
-            <FontAwesomeIcon icon={faShoppingCart} />
-          </button>
-          <button className="icon-button" id="heart" onClick={handleNewItem}>
-            <FontAwesomeIcon icon={faHeart} />
-          </button>
-          <button className="icon-button" id="search" onClick={handleAllItems}>
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-          <button
-            className="icon-button"
-            id="userProfile"
-            onClick={handleProfileClick}
-          >
-            <FontAwesomeIcon icon={faUser} />
-          </button>
-        </div>
-      </header>
+      <Header />
 
       <section className="sliding-message" onClick={handleSaleClick}>
         <div className="message">
@@ -98,8 +56,16 @@ const Dashboard = () => {
             latestItems.map((item) => {
               const imageUrl = `http://localhost:3001/${item.image}`;
               return (
-                <div key={item._id} className="product-item">
-                  <img src={imageUrl} alt={item.name} className="product-image" />
+                <div
+                  key={item._id}
+                  className="product-item"
+                  onClick={() => handleItemClick(item._id)}
+                >
+                  <img
+                    src={imageUrl}
+                    alt={item.name}
+                    className="product-image"
+                  />
                   <div className="product-info">
                     <p className="product-name">{item.name}</p>
                     <p className="product-price">Price: ${item.price}</p>

@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./ItemsListPage.css";
-import {
-  faShoppingCart,
-  faHeart,
-  faUser,
-  faHome,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import Header from "./Header";
+import { UserContext } from "./UserContext";
 
 function ItemsListPage() {
   const [items, setItems] = useState([]);
@@ -17,6 +11,7 @@ function ItemsListPage() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,53 +57,29 @@ function ItemsListPage() {
     setFilteredItems(filtered);
   };
 
-  const handleProfileClick = () => {
-    navigate("/profile");
-  };
-
-  const handleNewItem = () => {
-    navigate("/newItemPage");
-  };
-
-  const handleAllItems = () => {
-    navigate("/allItems");
-  };
-
   const handleItemClick = (id) => {
     navigate(`/item/${id}`);
   };
 
+  const handleAddToCart = (item) => {
+    const userId = user._id;
+
+    axios
+      .post("http://localhost:3001/shoppingCart", {
+        userId,
+        item,
+      })
+      .then(() => {
+        alert("Item added to cart!");
+      })
+      .catch((error) => {
+        console.error("There was an error adding the item to the cart!", error);
+      });
+  };
+
   return (
     <div className="dashboard">
-      <header className="header">
-        <img
-          src="/nomi-shop-high-resolution-logo-black-transparent.png"
-          alt="Nomi Shop Logo"
-          className="site-logo"
-        />
-        <div className="icons">
-          <button className="icon-button" id="home">
-            <FontAwesomeIcon icon={faHome} />
-          </button>
-          <button className="icon-button" id="shoppingCart">
-            <FontAwesomeIcon icon={faShoppingCart} />
-          </button>
-          <button className="icon-button" id="heart" onClick={handleNewItem}>
-            <FontAwesomeIcon icon={faHeart} />
-          </button>
-          <button className="icon-button" id="search" onClick={handleAllItems}>
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-          <button
-            className="icon-button"
-            id="userProfile"
-            onClick={handleProfileClick}
-          >
-            <FontAwesomeIcon icon={faUser} />
-          </button>
-        </div>
-      </header>
-
+      <Header />
       <div className="search-bar">
         <input
           type="text"
@@ -154,6 +125,15 @@ function ItemsListPage() {
                   <p className="product-name">{item.name}</p>
                   <p className="product-price">Price: ${item.price}</p>
                   <p className="card-text">{item.description}</p>
+                  <button
+                    className="btn btn-primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(item);
+                    }}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
             );

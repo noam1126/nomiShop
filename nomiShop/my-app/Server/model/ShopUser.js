@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ItemData = require("./ItemData");
 
 const ShopUserSchema = new mongoose.Schema({
   name: {
