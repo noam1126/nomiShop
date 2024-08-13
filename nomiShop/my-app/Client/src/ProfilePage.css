@@ -154,3 +154,45 @@
 .seller-section .edit-button {
   color: #007bff; /* Blue color for the edit button */
 }
+
+.orders-section {
+  margin-bottom: 20px;
+}
+
+.order-item {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.order-products {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.order-product-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  margin: 10px;
+  text-align: center;
+}
+
+.order-product-image {
+  width: 100%;
+  height: auto;
+}
+
+.order-product-info {
+  font-size: 0.9rem;
+}
+
+.order-product-name {
+  font-weight: bold;
+}
+
+.order-product-price {
+  color: #555;
+}

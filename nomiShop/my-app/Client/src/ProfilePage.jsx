@@ -16,6 +16,7 @@ const ProfilePage = () => {
     buyerOrSeller: "",
   });
   const [itemsForSale, setItemsForSale] = useState([]);
+  const [pastOrders, setPastOrders] = useState([]);
 
   useEffect(() => {
     if (user && user.email) {
@@ -34,6 +35,15 @@ const ProfilePage = () => {
                 console.error("Error fetching items for sale:", error);
               });
           }
+
+          axios
+            .get(`http://localhost:3001/orders/${response.data._id}`)
+            .then((ordersResponse) => {
+              setPastOrders(ordersResponse.data);
+            })
+            .catch((error) => {
+              console.error("Error fetching past orders:", error);
+            });
         })
         .catch((error) => {
           console.error("Error fetching user details:", error);
@@ -88,16 +98,34 @@ const ProfilePage = () => {
 
       <section className="section orders-section">
         <h2>My Past Orders</h2>
-        <ul>
-          {userDetails.orders &&
-            userDetails.orders.map((order) => (
-              <li key={order.id}>
-                <p>Product: {order.product}</p>
-                <p>Date: {order.date}</p>
-                <p>Amount: {order.amount}</p>
-              </li>
-            ))}
-        </ul>
+        {pastOrders.map((order) => (
+          <div key={order._id} className="order-item">
+            <h3>
+              Order placed on: {new Date(order.date).toLocaleDateString()}
+            </h3>
+            <div className="order-products">
+              {order.items.map((item) => {
+                const imageUrl = `http://localhost:3001/${item.image}`;
+                console.log(imageUrl);
+                return (
+                  <div key={item._id} className="order-product-item">
+                    <img
+                      src={imageUrl}
+                      alt={item.name}
+                      className="order-product-image"
+                    />
+                    <div className="order-product-info">
+                      <p className="order-product-name">{item.name}</p>
+                      <p className="order-product-price">
+                        Price: ${item.price} Quantity: {item.quantity}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </section>
 
       <section className="section details-section">

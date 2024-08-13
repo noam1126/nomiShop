@@ -290,6 +290,46 @@ app.get("/itemsForSale/:userId", (req, res) => {
     })
     .catch((err) => res.status(500).json({ error: err.message }));
 });
+app.delete("/shoppingCart/:userId/:itemId", (req, res) => {
+  const { userId, itemId } = req.params;
+
+  Cart.findOne({ userId })
+    .then((cart) => {
+      if (!cart) {
+        return res.status(404).json({ error: "Cart not found" });
+      }
+
+      cart.items = cart.items.filter((item) => item._id.toString() !== itemId);
+      return cart.save();
+    })
+    .then(() => res.status(200).json("Item removed from cart!"))
+    .catch((err) => res.status(500).json({ error: err.message }));
+});
+app.post("/orders", (req, res) => {
+  const { userId, items, date, status } = req.body;
+
+  const newOrder = new Order({
+    userId,
+    items,
+    date,
+    status,
+  });
+
+  newOrder
+    .save()
+    .then(() => {
+      // Clear the user's cart after placing the order
+      return Cart.findOneAndUpdate(
+        { userId },
+        { items: [] } // Clear cart items
+      );
+    })
+    .then(() => res.status(201).json(newOrder))
+    .catch((error) => {
+      console.error("Error saving order or clearing cart:", error);
+      res.status(500).send("Server Error");
+    });
+});
 
 // Import and use the order routes
 const orderRoutes = require("./routes/orderRoutes");
