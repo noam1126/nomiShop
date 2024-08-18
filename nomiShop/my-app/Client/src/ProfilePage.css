@@ -2,6 +2,12 @@
   font-size: 2em;
   margin-bottom: 20px;
 }
+.profile-page {
+  margin-left: 20px;
+}
+.profile-page header {
+  margin-left: -20px;
+}
 
 .section {
   margin-bottom: 40px;
