@@ -1,13 +1,8 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHome,
-  faShoppingCart,
-  faSearch,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
-import "./Header.css";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faShoppingCart, faHeart, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import './Header.css';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -24,28 +19,19 @@ const Header = () => {
         className="site-logo"
       />
       <div className="icons">
-        <button
-          className="icon-button"
-          onClick={() => handleNavigation("/dashboard")}
-        >
+        <button className="icon-button" onClick={() => handleNavigation('/dashboard')}>
           <FontAwesomeIcon icon={faHome} />
         </button>
-        <button
-          className="icon-button"
-          onClick={() => handleNavigation("/shoppingCart")}
-        >
+        <button className="icon-button" onClick={() => handleNavigation('/shoppingCart')}>
           <FontAwesomeIcon icon={faShoppingCart} />
         </button>
-        <button
-          className="icon-button"
-          onClick={() => handleNavigation("/allItems")}
-        >
+        <button className="icon-button" onClick={() => handleNavigation('/favorites')}>
+          <FontAwesomeIcon icon={faHeart} />
+        </button>
+        <button className="icon-button" onClick={() => handleNavigation('/allItems')}>
           <FontAwesomeIcon icon={faSearch} />
         </button>
-        <button
-          className="icon-button"
-          onClick={() => handleNavigation("/profile")}
-        >
+        <button className="icon-button" onClick={() => handleNavigation('/profile')}>
           <FontAwesomeIcon icon={faUser} />
         </button>
       </div>
