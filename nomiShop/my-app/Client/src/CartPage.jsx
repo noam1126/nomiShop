@@ -66,31 +66,6 @@ function CartPage() {
       );
   };
 
-  // const handleOrderCart = () => {
-  //   if (cartItems.length === 0) {
-  //     alert("Your cart is empty!");
-  //     return;
-  //   }
-
-  //   const orderData = {
-  //     userId: userId,
-  //     items: cartItems,
-  //     date: new Date().toISOString(),
-  //     status: "Pending", // Status field to track the order state
-  //   };
-
-  //   axios
-  //     .post("http://localhost:3001/orders", orderData)
-  //     .then((response) => {
-  //       setOrderPlaced(true);
-  //       alert("Order placed successfully!");
-  //       setCartItems([]); // Clear the cart after placing the order
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error placing the order:", error);
-  //       alert("There was an issue placing your order. Please try again.");
-  //     });
-  // };
   const handleOrderCart = () => {
     if (cartItems.length === 0) {
       alert("Your cart is empty!");

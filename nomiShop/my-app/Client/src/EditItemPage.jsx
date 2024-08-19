@@ -65,7 +65,7 @@ function EditItemPage() {
       })
       .then((response) => {
         console.log(response.data);
-        navigate("/profile"); // Redirect to profile page or wherever you need
+        navigate("/profile");
       })
       .catch((error) => {
         console.error("There was an error updating the item!", error);

@@ -22,7 +22,6 @@ if (!fs.existsSync(uploadDir)) {
 // Serve static files from the uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Configure Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -49,7 +48,6 @@ app.post("/login", (req, res) => {
   UserModel.findOne({ email: email }).then((user) => {
     if (user) {
       if (user.password === password) {
-        // Include user _id in the response
         res.json({
           status: "Success",
           user: {
@@ -72,7 +70,6 @@ app.post("/register", (req, res) => {
   console.log("register started...");
   UserModel.create(req.body)
     .then((user) => {
-      // Include user _id in the response
       res.json({
         _id: user._id,
         email: user.email,
@@ -134,7 +131,6 @@ app.get("/item/:id", (req, res) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-// Add the new endpoint to fetch the latest items
 app.get("/latestItems", async (req, res) => {
   try {
     const now = new Date();

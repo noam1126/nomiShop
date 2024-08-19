@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
   faShoppingCart,
-  // faHeart,
   faSearch,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -37,12 +36,6 @@ const Header = () => {
         >
           <FontAwesomeIcon icon={faShoppingCart} />
         </button>
-        {/* <button
-          className="icon-button"
-          onClick={() => handleNavigation("/newItemPage")}
-        >
-          <FontAwesomeIcon icon={faHeart} />
-        </button> */}
         <button
           className="icon-button"
           onClick={() => handleNavigation("/allItems")}
