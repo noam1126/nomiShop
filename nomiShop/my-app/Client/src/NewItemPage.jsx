@@ -1,11 +1,15 @@
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
-import Header from "./Header";
-import { UserContext } from "./UserContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faShoppingCart,
+  faHeart,
+  faUser,
+  faHome,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 
 function NewItemPage() {
-  const { user } = useContext(UserContext);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -23,24 +27,16 @@ function NewItemPage() {
     reader.readAsDataURL(file);
   };
 
-  const navigate = useNavigate();
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!user) {
-      console.error("User not logged in!");
-      return;
-    }
-
+    // Create form data
     const formData = new FormData();
-    formData.append("userId", user._id);
     formData.append("name", name);
     formData.append("price", price);
     formData.append("description", description);
     formData.append("category", category);
     formData.append("image", image);
-
     axios
       .post("http://localhost:3001/newItemPage", formData, {
         headers: {
@@ -49,7 +45,7 @@ function NewItemPage() {
       })
       .then((response) => {
         console.log(response.data);
-
+        // Reset form
         setName("");
         setPrice("");
         setDescription("");
@@ -62,9 +58,48 @@ function NewItemPage() {
       });
   };
 
+  const handleHomeClick = () => {
+    navigate("/dashboard");
+  };
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
+  const handleAllItems = () => {
+    navigate("/allItems");
+  };
+
   return (
     <div className="newItemPage">
-      <Header />
+      <header className="header">
+        <img
+          src="/nomi-shop-high-resolution-logo-black-transparent.png"
+          alt="Nomi Shop Logo"
+          className="site-logo"
+        />
+        <div className="icons">
+          <button className="icon-button" id="home" onClick={handleHomeClick}>
+            <FontAwesomeIcon icon={faHome} />
+          </button>
+          <button className="icon-button" id="shoppingCart">
+            <FontAwesomeIcon icon={faShoppingCart} />
+          </button>
+          <button className="icon-button" id="heart">
+            <FontAwesomeIcon icon={faHeart} />
+          </button>
+          <button className="icon-button" id="search" onClick={handleAllItems}>
+            <FontAwesomeIcon icon={faSearch} />
+          </button>
+          <button
+            className="icon-button"
+            id="userProfile"
+            onClick={handleProfileClick}
+          >
+            <FontAwesomeIcon icon={faUser} />
+          </button>
+        </div>
+      </header>
       <div className="container mt-5">
         <h2>Add New Item</h2>
         <form onSubmit={handleSubmit}>
@@ -150,5 +185,4 @@ function NewItemPage() {
     </div>
   );
 }
-
 export default NewItemPage;

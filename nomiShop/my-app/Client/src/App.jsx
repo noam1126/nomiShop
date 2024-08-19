@@ -9,27 +9,24 @@ import ProfilePage from "./ProfilePage";
 import ItemDetailsPage from "./ItemDetailsPage";
 import ItemsListPage from "./ItemsListPage";
 import NewItemPage from "./NewItemPage";
-import CartPage from "./CartPage";
-import { UserProvider } from "./UserContext";
-import EditItemPage from "./EditItemPage";
+import { UserProvider } from './UserContext';
+
 
 function App() {
   return (
     <UserProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/newItemPage" element={<NewItemPage />} />
-          <Route path="/allItems" element={<ItemsListPage />} />
-          <Route path="/item/:id" element={<ItemDetailsPage />} />
-          <Route path="/shoppingCart" element={<CartPage />} />
-          <Route path="/editItem/:itemId" element={<EditItemPage />} />
-        </Routes>
-      </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/newItemPage" element={<NewItemPage />} />
+        <Route path="/allItems" element={<ItemsListPage />} />
+        <Route path="/item/:id" element={<ItemDetailsPage />} />
+      </Routes>
+    </BrowserRouter>
     </UserProvider>
   );
 }
